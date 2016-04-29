@@ -35,7 +35,7 @@
                     <div class="form-group">
                         <label for="task-priority" class="col-sm-3 control-label">Priority</label>
                         <div class="col-sm-6">
-                            <select>
+                            <select class="form-control" id="task-priority" name="priority">
                                 <option>Low</option>
                                 <option>Normal</option>
                                 <option>High</option>
@@ -47,7 +47,7 @@
                     <div class="form-group">
                         <label for="task-status" class="col-sm-3 control-label">Status</label>
                         <div class="col-sm-6">
-                            <select>
+                            <select class="form-control" id="task-status" name="status">
                                 @for($i=0;$i<=100;$i+=10)
                                 <option>{{$i}}</option>
                                 @endfor
@@ -58,7 +58,7 @@
                     <div class="form-group">
                         <div class="col-sm-offset-3 col-sm-6">
                             <button type="submit" class="btn btn-default">
-                                <i class="fa fa-btn fa-plus"></i>Add Task
+                                <i class="fa fa-btn fa-plus"></i>Save Task
                             </button>
                         </div>
                     </div>
@@ -97,6 +97,14 @@
 
                                     <button type="submit" id="delete-task-{{ $task->id }}" class="btn btn-danger">
                                         <i class="fa fa-btn fa-trash"></i>Delete
+                                    </button>
+                                </form>
+                                <form action="/task/{{ $task->id }}" method="POST">
+                                    {{ csrf_field() }}
+                                    {{ method_field('PUT') }}
+                                    
+                                    <button type="submit" id="edit-task-{{ $task->id }}" class="btn">
+                                        <i class="fa fa-btn fa-pencil"></i> Edit
                                     </button>
                                 </form>
                             </td>
