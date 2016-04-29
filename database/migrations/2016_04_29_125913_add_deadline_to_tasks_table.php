@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddColumnUserId extends Migration
+class AddDeadlineToTasksTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,7 +12,9 @@ class AddColumnUserId extends Migration
      */
     public function up()
     {
-        
+        Schema::table('tasks', function (Blueprint $table) {
+            $table->date('deadline');
+        });
     }
 
     /**
@@ -22,6 +24,8 @@ class AddColumnUserId extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('tasks', function (Blueprint $table) {
+            $table->dropColumn('deadline');
+        });
     }
 }

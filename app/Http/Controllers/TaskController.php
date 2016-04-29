@@ -55,10 +55,16 @@ class TaskController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|max:255',
+            'deadline' => 'required',
+            'status' => 'required',
+            'priority' => 'required',
         ]);
 
         $request->user()->tasks()->create([
             'name' => $request->name,
+            'deadline' => $request->deadline,
+            'priority' => $request->priority,
+            'status' => $request->status,
         ]);
 
         return redirect('/tasks');
