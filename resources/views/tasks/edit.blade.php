@@ -13,7 +13,7 @@
                 @include('common.errors')
 
                 <!-- New Task Form -->
-                <form action="/task" method="POST" class="form-horizontal">
+                <form action="/edit/{{ $task->id}}" method="POST" class="form-horizontal">
                     {{ csrf_field() }}
 
                     <!-- Task Name -->
@@ -36,11 +36,11 @@
                         <label for="task-priority" class="col-sm-3 control-label">Priority</label>
                         <div class="col-sm-6">
                             <select class="form-control" id="task-priority" name="priority">
-                                <option @if($task->priority == 'Low') 'selected' @endif>Low</option>
-                                <option @if($task->priority == 'Normal') 'selected' @endif>Normal</option>
-                                <option @if($task->priority == 'High') 'selected' @endif>High</option>
-                                <option @if($task->priority == 'Urgent') 'selected' @endif>Urgent</option>
-                                <option @if($task->priority == 'Immediate') 'selected' @endif>Immediate</option>
+                                <option @if ($task->priority == 'Low') selected="selected" @endif>Low</option>
+                                <option @if ($task->priority == 'Normal') selected="selected" @endif>Normal</option>
+                                <option @if ($task->priority == 'High') selected="selected" @endif>High</option>
+                                <option @if ($task->priority == 'Urgent') selected="selected" @endif>Urgent</option>
+                                <option @if ($task->priority == 'Immediate') selected="selected" @endif>Immediate</option>
                             </select>
                         </div>
                     </div>
@@ -49,7 +49,7 @@
                         <div class="col-sm-6">
                             <select class="form-control" id="task-status" name="status">
                                 @for($i=0;$i<=100;$i+=10)
-                                <option @if($task->status == $i) 'selected' @endif>{{$i}}</option>
+                                <option @if ($task->status == $i) selected="selected" @endif>{{$i}}</option>
                                 @endfor
                             </select>
                         </div>

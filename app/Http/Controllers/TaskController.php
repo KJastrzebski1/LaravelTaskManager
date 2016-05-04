@@ -71,6 +71,21 @@ class TaskController extends Controller {
         ]);
     }
 
+    public function update(Request $request, Task $task) {
+        $this->validate($request, [
+            'name' => 'required|max:255',
+            'deadline' => 'required',
+            'status' => 'required',
+            'priority' => 'required',
+        ]);
+        $task->name = $request->name;
+        $task->deadline = $request->deadline;
+        $task->priority = $request->priority;
+        $task->status = $request->status;
+        $task->save();
+        return redirect('/tasks');
+    }
+
     /**
      * Destroy the given task.
      *
