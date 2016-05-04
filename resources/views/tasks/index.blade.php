@@ -2,6 +2,14 @@
 
 @section('content')
 <div class="container">
+    <div class="alert alert-warning" >
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>Warning!</strong> You are in offline mode. Your data will be stored locally and synchronized after getting online.
+    </div>
+    <div class="alert alert-success" >
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>Success!</strong> Your data has been synchronized with server.
+    </div>
     <div class="col-sm-offset-2 col-sm-8">
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -29,7 +37,7 @@
                     <div class="form-group">
                         <label for="task-deadline" class="col-sm-3 control-label">Deadline</label>
                         <div class="col-sm-6">
-                            <input type='date' class="form-control" name="deadline" id='task-deadline' value="{{ old('task') }}"/>
+                            <input type='date' class="form-control" name="deadline" id='task-deadline' value="rrrr-mm-dd"/>
                         </div>
                     </div>
                     <div class="form-group">
@@ -84,29 +92,39 @@
                     </thead>
                     <tbody>
                         @foreach ($tasks as $task)
-                        <tr>
-                            <td class="table-text"><div>{{ $task->name }}</div></td>
-                            <td class="table-text"><div>{{ $task->deadline }}</div></td>
-                            <td class="table-text"><div>{{ $task->status}}%</div></td>
-                            <td class="table-text"><div>{{ $task->priority}}</div></td>
+                    <script>
+                        localStorage.setItem('TaskRepo{{ $task->id }}', [
+                            {{ $task->id }},
+                            '{{ $task->name }}',
+                            '{{ $task->deadline }}',
+                            {{ $task->status}},
+                            '{{ $task->priority}}'
+                        ]);
+                        
+                    </script>
+                        <tr id='task-{{ $task->id }}'>
+                            <td class="table-text tname"><div>{{ $task->name }}</div></td>
+                            <td class="table-text tdeadline"><div>{{ $task->deadline }}</div></td>
+                            <td class="table-text tstatus"><div>{{ $task->status}}%</div></td>
+                            <td class="table-text tpriority"><div>{{ $task->priority}}</div></td>
                             <!-- Task Delete Button -->
                             <td>
-                                <form action="/task/{{ $task->id }}" method="POST">
+                                <!-- <form action="/task/{{ $task->id }}" method="POST">
                                     {{ csrf_field() }}
                                     {{ method_field('DELETE') }}
-
-                                    <button type="submit" id="delete-task-{{ $task->id }}" class="btn btn-danger">
+                                </form> -->
+                                    <button type="submit" id="delete-task-{{ $task->id }}" class="btn btn-danger delete">
                                         <i class="fa fa-btn fa-trash"></i>Delete
                                     </button>
-                                </form>
-                                <form action="/task/{{ $task->id }}" method="POST">
+                                
+                                <!-- <form action="/task/{{ $task->id }}" method="POST">
                                     {{ csrf_field() }}
-                                    {{ method_field('PUT') }}
-                                    
-                                    <button type="submit" id="edit-task-{{ $task->id }}" class="btn">
+                                    {{ method_field('PUT') }} 
+                                </form>  -->  
+                                    <button type="submit" id="edit-task-{{ $task->id }}" class="btn edit">
                                         <i class="fa fa-btn fa-pencil"></i> Edit
                                     </button>
-                                </form>
+                                    <button id="save-task-{{ $task->id }}" class="btn save">Save</button>
                             </td>
                         </tr>
                         @endforeach
