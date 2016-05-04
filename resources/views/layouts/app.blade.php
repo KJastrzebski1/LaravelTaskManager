@@ -14,7 +14,7 @@
     <!-- Styles -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
     {{-- <link href="{{ elixir('css/app.css') }}" rel="stylesheet"> --}}
-
+    <script type="text/javascript" src="{{ URL::asset('js/sorttable.js') }}"></script>
     <style>
         body {
             font-family: 'Lato';

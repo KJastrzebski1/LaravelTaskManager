@@ -74,7 +74,7 @@
             </div>
 
             <div class="panel-body">
-                <table class="table table-striped task-table">
+                <table class="table table-striped task-table sortable">
                     <thead>
                     <th>Task</th>
                     <th>Deadline</th>
@@ -87,7 +87,7 @@
                         <tr>
                             <td class="table-text"><div>{{ $task->name }}</div></td>
                             <td class="table-text"><div>{{ $task->deadline }}</div></td>
-                            <td class="table-text"><div>{{ $task->status}}</div></td>
+                            <td class="table-text"><div>{{ $task->status}}%</div></td>
                             <td class="table-text"><div>{{ $task->priority}}</div></td>
                             <!-- Task Delete Button -->
                             <td>

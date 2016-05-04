@@ -65,11 +65,19 @@ class TaskController extends Controller {
         return redirect('/tasks');
     }
 
+    /*
+     * 
+     */
+
     public function edit(Request $request, Task $task) {
         return view('tasks.edit', [
             'task' => $task,
         ]);
     }
+
+    /*
+     * 
+     */
 
     public function update(Request $request, Task $task) {
         $this->validate($request, [
