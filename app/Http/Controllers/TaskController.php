@@ -48,32 +48,20 @@ class TaskController extends Controller {
      * @return Response
      */
     public function store(Request $request) {
-        $this->validate($request, [
-            'name' => 'required|max:255',
-            'deadline' => 'required',
-            'status' => 'required',
-            'priority' => 'required',
-        ]);
-
+        $data = $request["data"];
         $request->user()->tasks()->create([
-            'name' => $request->name,
-            'deadline' => $request->deadline,
-            'priority' => $request->priority,
-            'status' => $request->status,
+            "name" => $data["name"],
+            "deadline" => $data["deadline"],
+            "priority" => $data["priority"],
+            "status" => $data["status"],
         ]);
-
+        echo $request->user();
         return redirect('/tasks');
     }
 
     /*
      * 
      */
-
-    public function edit(Request $request, Task $task) {
-        return view('tasks.edit', [
-            'task' => $task,
-        ]);
-    }
 
     /*
      * 
@@ -92,6 +80,29 @@ class TaskController extends Controller {
         $task->status = $request->status;
         $task->save();
         return redirect('/tasks');
+    }
+
+    /*
+     * 
+     */
+
+    public function save(Request $request) {
+        $data = $request['data'];
+        $task = Task::findOrFail($data[0]);
+        $task->name = $data[1];
+        $task->deadline = $data[2];
+        $task->status = $data[3];
+        $task->priority = $data[4];
+        $task->save();
+        return response()->json($task);
+    }
+
+    public function destroyAjax(Request $request) {
+        $data = $request['data'];
+        $task = Task::findOrFail($data);
+        $this->authorize('destroy', $task);
+        $task->delete();
+        return 'deleted';
     }
 
     /**

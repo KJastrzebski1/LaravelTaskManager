@@ -20,10 +20,8 @@
                 <!-- Display Validation Errors -->
                 @include('common.errors')
 
-                <!-- New Task Form -->
-                <form action="/task" method="POST" class="form-horizontal">
-                    {{ csrf_field() }}
-
+                <!-- New Task Form <form action="/task" method="POST" class="form-horizontal">-->
+                <form class="form-horizontal">
                     <!-- Task Name -->
                     <div class="form-group">
                         <label for="task-name" class="col-sm-3 control-label">Task</label>
@@ -37,7 +35,7 @@
                     <div class="form-group">
                         <label for="task-deadline" class="col-sm-3 control-label">Deadline</label>
                         <div class="col-sm-6">
-                            <input type='date' class="form-control" name="deadline" id='task-deadline' value="rrrr-mm-dd"/>
+                            <input type='date' class="form-control" name="deadline" id='task-deadline' value="yyyy-mm-dd"/>
                         </div>
                     </div>
                     <div class="form-group">
@@ -65,7 +63,7 @@
                     <!-- Add Task Button -->
                     <div class="form-group">
                         <div class="col-sm-offset-3 col-sm-6">
-                            <button type="submit" class="btn btn-default">
+                            <button type="submit" class="btn btn-default new-task">
                                 <i class="fa fa-btn fa-plus"></i>Save Task
                             </button>
                         </div>
@@ -90,46 +88,51 @@
                     <th>Priority</th>
                     <th>&nbsp;</th>
                     </thead>
+                    <script>
+                        localStorage.taskRepo = "";
+                        var task = [];</script>
                     <tbody>
                         @foreach ($tasks as $task)
                     <script>
-                        localStorage.setItem('TaskRepo{{ $task->id }}', [
-                            {{ $task->id }},
-                            '{{ $task->name }}',
-                            '{{ $task->deadline }}',
-                            {{ $task->status}},
-                            '{{ $task->priority}}'
-                        ]);
-                        
+                        task.push({
+                                "id": {{ $task -> id }},
+                                "name": "{{ $task->name }}",
+                                "deadline": "{{ $task->deadline }}",
+                                "status": {{ $task->status }},
+                                "priority": "{{ $task->priority}}"
+                        });
                     </script>
-                        <tr id='task-{{ $task->id }}'>
-                            <td class="table-text tname"><div>{{ $task->name }}</div></td>
-                            <td class="table-text tdeadline"><div>{{ $task->deadline }}</div></td>
-                            <td class="table-text tstatus"><div>{{ $task->status}}%</div></td>
-                            <td class="table-text tpriority"><div>{{ $task->priority}}</div></td>
-                            <!-- Task Delete Button -->
-                            <td>
-                                <!-- <form action="/task/{{ $task->id }}" method="POST">
-                                    {{ csrf_field() }}
-                                    {{ method_field('DELETE') }}
-                                </form> -->
-                                    <button type="submit" id="delete-task-{{ $task->id }}" class="btn btn-danger delete">
-                                        <i class="fa fa-btn fa-trash"></i>Delete
-                                    </button>
-                                
-                                <!-- <form action="/task/{{ $task->id }}" method="POST">
-                                    {{ csrf_field() }}
-                                    {{ method_field('PUT') }} 
-                                </form>  -->  
-                                    <button type="submit" id="edit-task-{{ $task->id }}" class="btn edit">
-                                        <i class="fa fa-btn fa-pencil"></i> Edit
-                                    </button>
-                                    <button id="save-task-{{ $task->id }}" class="btn save">Save</button>
-                            </td>
-                        </tr>
-                        @endforeach
+                    <tr id='task-{{ $task->id }}'>
+                        <td class="table-text tname"><div>{{ $task->name }}</div></td>
+                        <td class="table-text tdeadline"><div>{{ $task->deadline }}</div></td>
+                        <td class="table-text tstatus"><div>{{ $task->status}}%</div></td>
+                        <td class="table-text tpriority"><div>{{ $task->priority}}</div></td>
+                        <!-- Task Delete Button -->
+                        <td>
+                            <!-- <form action="/task/{{ $task->id }}" method="POST">
+                                {{ csrf_field() }}
+                                {{ method_field('DELETE') }}
+                            </form> -->
+                            <button type="submit" id="delete-task-{{ $task->id }}" class="btn btn-danger delete">
+                                <i class="fa fa-btn fa-trash"></i>Delete
+                            </button>
+
+                            <!-- <form action="/task/{{ $task->id }}" method="POST">
+                                {{ csrf_field() }}
+                                {{ method_field('PUT') }} 
+                            </form>  -->  
+                            <button type="submit" id="edit-task-{{ $task->id }}" class="btn edit">
+                                <i class="fa fa-btn fa-pencil"></i> Edit
+                            </button>
+                            <button id="save-task-{{ $task->id }}" class="btn save">Save</button>
+                        </td>
+                    </tr>
+                    @endforeach
                     </tbody>
                 </table>
+                <script>
+                    localStorage.taskRepo = JSON.stringify(task);
+                </script>
             </div>
         </div>
         @endif
