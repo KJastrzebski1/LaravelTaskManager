@@ -8,6 +8,12 @@
 $(".alert-warning").hide();
 $(".alert-success").hide();
 $(".save").hide();
+$(function () {
+    $('#datetimepicker1').datetimepicker({
+        format: 'YYYY-MM-DD'
+    });
+});
+
 $(document).ready(function () {
 
     $(".delete").click(function () {
@@ -100,7 +106,10 @@ $(document).ready(function () {
         };
         if (navigator.onLine) {
             $.post('/task', {'data': task}, function (response) {
-            });
+            })
+                    .done(function (response) {
+                        window.location = "/tasks";
+                    });
         } else {
             if (localStorage.tasksToAdd) {
                 var tasksToAdd = JSON.parse(localStorage.tasksToAdd);

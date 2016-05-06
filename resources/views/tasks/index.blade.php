@@ -21,7 +21,7 @@
                 @include('common.errors')
 
                 <!-- New Task Form <form action="/task" method="POST" class="form-horizontal">-->
-                <form class="form-horizontal">
+                <div class="form-horizontal">
                     <!-- Task Name -->
                     <div class="form-group">
                         <label for="task-name" class="col-sm-3 control-label">Task</label>
@@ -34,8 +34,11 @@
                     <!-- Task Deadline -->
                     <div class="form-group">
                         <label for="task-deadline" class="col-sm-3 control-label">Deadline</label>
-                        <div class="col-sm-6">
-                            <input type='date' class="form-control" name="deadline" id='task-deadline' value="yyyy-mm-dd"/>
+                        <div class='input-group date col-sm-6' id='datetimepicker1'>
+                            <input type='text' name="deadline" id="task-deadline" class="form-control" />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
                         </div>
                     </div>
                     <div class="form-group">
@@ -63,12 +66,12 @@
                     <!-- Add Task Button -->
                     <div class="form-group">
                         <div class="col-sm-offset-3 col-sm-6">
-                            <button type="submit" class="btn btn-default new-task">
+                            <button class="btn btn-default new-task">
                                 <i class="fa fa-btn fa-plus"></i>Save Task
                             </button>
                         </div>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
 

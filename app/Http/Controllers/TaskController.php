@@ -55,8 +55,7 @@ class TaskController extends Controller {
             "priority" => $data["priority"],
             "status" => $data["status"],
         ]);
-        echo $request->user();
-        return redirect('/tasks');
+        return redirect('/tasks');//redirect('/tasks');
     }
 
     /*
