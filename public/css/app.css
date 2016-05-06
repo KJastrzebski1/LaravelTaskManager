@@ -2,3 +2,10 @@
     padding-right: 15px;
     padding-left: 15px;
 }
+.save{
+    display: none;
+}
+
+.alert{
+    display: none;
+}

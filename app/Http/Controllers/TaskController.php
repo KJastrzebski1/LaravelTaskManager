@@ -49,13 +49,13 @@ class TaskController extends Controller {
      */
     public function store(Request $request) {
         $data = $request["data"];
-        $request->user()->tasks()->create([
+        $task = $request->user()->tasks()->create([
             "name" => $data["name"],
             "deadline" => $data["deadline"],
             "priority" => $data["priority"],
             "status" => $data["status"],
         ]);
-        return redirect('/tasks');//redirect('/tasks');
+        return response()->json($task);//redirect('/tasks');
     }
 
     /*

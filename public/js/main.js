@@ -1,13 +1,6 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 
-$(".alert-warning").hide();
-$(".alert-success").hide();
-$(".save").hide();
+
 $(function () {
     $('#datetimepicker1').datetimepicker({
         format: 'YYYY-MM-DD'
@@ -16,7 +9,7 @@ $(function () {
 
 $(document).ready(function () {
 
-    $(".delete").click(function () {
+    $(".task-table").on('click', '.delete', function () {
         var id = parseInt((this.id.replace('delete-task-', '')));
         var tasks = JSON.parse(localStorage.taskRepo);
         if (localStorage.tasksToDelete) {
@@ -40,7 +33,7 @@ $(document).ready(function () {
         localStorage.tasksToDelete = JSON.stringify(tasksToDelete);
         $("tr#task-" + id).remove();
     });
-    $(".edit").click(function () {
+    $(".task-table").on('click', '.edit', function () {
         var id = parseInt((this.id.replace('edit-task-', '')));
         var tasks = JSON.parse(localStorage.taskRepo);
         for (var i = 0; i < tasks.length; i++) {
@@ -70,7 +63,7 @@ $(document).ready(function () {
         $("tr#task-" + id + " .tpriority select").val(task["priority"]);
     });
 
-    $(".save").click(function () {
+    $(".task-table").on('click', '.save', function () {
         $(this).hide();
 
         var id = parseInt((this.id.replace('save-task-', '')));
@@ -104,11 +97,33 @@ $(document).ready(function () {
             'status': $('#task-status').val(),
             'priority': $('#task-priority').val()
         };
+
         if (navigator.onLine) {
             $.post('/task', {'data': task}, function (response) {
             })
                     .done(function (response) {
-                        window.location = "/tasks";
+                        console.log(response);
+                        $(".task-table tbody").append(
+                                '<tr id=task-' + response["id"] + '>' +
+                                '<td class="table-text tname"><div>' + response['name'] + '</div></td>' +
+                                '<td class="table-text tdeadline"><div>' + response['deadline'] + '</div></td>' +
+                                '<td class="table-text tstatus"><div>' + response['status'] + '</div></td>' +
+                                '<td class="table-text tpriority"><div>' + response['priority'] + '</div></td>' +
+                                '<td>' +
+                                '<button type="submit" id="delete-task-' + response["id"] + '" class="btn btn-danger delete">' +
+                                '<i class="fa fa-btn fa-trash"></i>Delete' +
+                                '</button>' +
+                                '<button type="submit" id="edit-task-' + response["id"] + '" class="btn edit">' +
+                                '<i class="fa fa-btn fa-pencil"></i> Edit' +
+                                '</button>' +
+                                '<button id="save-task-' + response["id"] + '" class="btn save">Save</button>' +
+                                '</td>' +
+                                "</tr>"
+                                );
+                        var tasks = JSON.parse(localStorage.taskRepo);
+                        task.id = response['id'];
+                        tasks.push(task);
+                        localStorage.taskRepo = JSON.stringify(tasks);
                     });
         } else {
             if (localStorage.tasksToAdd) {
