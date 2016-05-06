@@ -55,13 +55,9 @@ class TaskController extends Controller {
             "priority" => $data["priority"],
             "status" => $data["status"],
         ]);
-        return response()->json($task);//redirect('/tasks');
+        return ['view' => (string)view('tasks.task', ['task' => $task]), 'id' => $task['id']];//redirect('/tasks');
     }
-
-    /*
-     * 
-     */
-
+    
     /*
      * 
      */
@@ -111,6 +107,7 @@ class TaskController extends Controller {
      * @param  Task  $task
      * @return Response
      */
+    
     public function destroy(Request $request, Task $task) {
         $this->authorize('destroy', $task);
 

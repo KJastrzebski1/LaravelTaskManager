@@ -95,7 +95,16 @@
                         localStorage.taskRepo = "";
                         var task = [];</script>
                     <tbody>
-                    @foreach ($tasks as $task)
+                        @foreach ($tasks as $task)
+                    <script>
+                        task.push({
+                        "id": {{ $task->id }},
+                                "name": "{{ $task->name }}",
+                                "deadline": "{{ $task->deadline }}",
+                                "status": {{ $task->status }},
+                                "priority": "{{ $task->priority}}"
+                        });
+                    </script>
                     @include('tasks.task', ['task' => $task])
                     @endforeach
                     </tbody>

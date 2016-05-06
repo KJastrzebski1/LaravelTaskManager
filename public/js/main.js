@@ -10,12 +10,17 @@ $(function () {
 $(document).ready(function () {
 
     $(".task-table").on('click', '.delete', function () {
-        var id = parseInt((this.id.replace('delete-task-', '')));
+        var id = (this.id.replace('delete-task-', ''));
         var tasks = JSON.parse(localStorage.taskRepo);
         if (localStorage.tasksToDelete) {
             var tasksToDelete = JSON.parse(localStorage.tasksToDelete);
         } else {
             var tasksToDelete = [];
+        }
+        if (localStorage.tasksToAdd) {
+            var tasksToAdd = JSON.parse(localStorage.tasksToAdd);
+        } else {
+            var tasksToAdd = [];
         }
         for (var i = 0; i < tasks.length; i++) {
             if (tasks[i]["id"] == id) {
@@ -25,6 +30,7 @@ $(document).ready(function () {
                     });
                 } else {
                     tasksToDelete.push(tasks[i]["id"]);
+                    
                 }
                 tasks.splice(i, 1);
             }
@@ -34,7 +40,7 @@ $(document).ready(function () {
         $("tr#task-" + id).remove();
     });
     $(".task-table").on('click', '.edit', function () {
-        var id = parseInt((this.id.replace('edit-task-', '')));
+        var id = (this.id.replace('edit-task-', ''));
         var tasks = JSON.parse(localStorage.taskRepo);
         for (var i = 0; i < tasks.length; i++) {
             if (tasks[i]["id"] == id) {
@@ -66,7 +72,7 @@ $(document).ready(function () {
     $(".task-table").on('click', '.save', function () {
         $(this).hide();
 
-        var id = parseInt((this.id.replace('save-task-', '')));
+        var id = (this.id.replace('save-task-', ''));
         var task = [
             id,
             $("tr#task-" + id + " .tname input").val(),
@@ -97,33 +103,18 @@ $(document).ready(function () {
             'status': $('#task-status').val(),
             'priority': $('#task-priority').val()
         };
-
+        var tasks = JSON.parse(localStorage.taskRepo);
+        
         if (navigator.onLine) {
             $.post('/task', {'data': task}, function (response) {
             })
                     .done(function (response) {
-                        console.log(response);
-                        $(".task-table tbody").append(
-                                '<tr id=task-' + response["id"] + '>' +
-                                '<td class="table-text tname"><div>' + response['name'] + '</div></td>' +
-                                '<td class="table-text tdeadline"><div>' + response['deadline'] + '</div></td>' +
-                                '<td class="table-text tstatus"><div>' + response['status'] + '</div></td>' +
-                                '<td class="table-text tpriority"><div>' + response['priority'] + '</div></td>' +
-                                '<td>' +
-                                '<button type="submit" id="delete-task-' + response["id"] + '" class="btn btn-danger delete">' +
-                                '<i class="fa fa-btn fa-trash"></i>Delete' +
-                                '</button>' +
-                                '<button type="submit" id="edit-task-' + response["id"] + '" class="btn edit">' +
-                                '<i class="fa fa-btn fa-pencil"></i> Edit' +
-                                '</button>' +
-                                '<button id="save-task-' + response["id"] + '" class="btn save">Save</button>' +
-                                '</td>' +
-                                "</tr>"
-                                );
-                        var tasks = JSON.parse(localStorage.taskRepo);
+                        $(".task-table tbody").append(response['view']);
+                        
                         task.id = response['id'];
                         tasks.push(task);
                         localStorage.taskRepo = JSON.stringify(tasks);
+                        
                     });
         } else {
             if (localStorage.tasksToAdd) {
@@ -131,7 +122,27 @@ $(document).ready(function () {
             } else {
                 var tasksToAdd = [];
             }
+            task["id"]= 'tmp-'+tasksToAdd.length;
+            $(".task-table tbody").append(
+                                '<tr id="task-' + task["id"] + '">' +
+                                '<td class="table-text tname"><div>' + task['name'] + '</div></td>' +
+                                '<td class="table-text tdeadline"><div>' + task['deadline'] + '</div></td>' +
+                                '<td class="table-text tstatus"><div>' + task['status'] + '</div></td>' +
+                                '<td class="table-text tpriority"><div>' + task['priority'] + '</div></td>' +
+                                '<td>' +
+                                '<button type="submit" id="delete-task-' + task["id"] + '" class="btn btn-danger delete">' +
+                                '<i class="fa fa-btn fa-trash"></i>Delete' +
+                                '</button>' +
+                                '<button type="submit" id="edit-task-' + task["id"] + '" class="btn edit">' +
+                                '<i class="fa fa-btn fa-pencil"></i> Edit' +
+                                '</button>' +
+                                '<button id="save-task-' + task["id"] + '" class="btn save">Save</button>' +
+                                '</td>' +
+                                '</tr>'
+                                );
             tasksToAdd.push(task);
+            tasks.push(task);
+            localStorage.taskRepo = JSON.stringify(tasks);
             localStorage.tasksToAdd = JSON.stringify(tasksToAdd);
         }
     });
@@ -168,9 +179,8 @@ $(document).ready(function () {
                         console.log(response);
                     });
                 }
-
-
                 localStorage.tasksToDelete = "";
+                window.location = "/tasks";
             } else {
                 $(".alert-warning").show();
             }

@@ -1,13 +1,4 @@
 
-<script>
-    task.push({
-    "id": {{ $task->id }},
-            "name": "{{ $task->name }}",
-            "deadline": "{{ $task->deadline }}",
-            "status": {{ $task->status }},
-            "priority": "{{ $task->priority}}"
-    });
-</script>
 <tr id='task-{{ $task->id }}'>
     <td class="table-text tname"><div>{{ $task->name }}</div></td>
     <td class="table-text tdeadline"><div>{{ $task->deadline }}</div></td>
