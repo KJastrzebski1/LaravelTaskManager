@@ -83,11 +83,11 @@ class TaskController extends Controller {
 
     public function save(Request $request) {
         $data = $request['data'];
-        $task = Task::findOrFail($data[0]);
-        $task->name = $data[1];
-        $task->deadline = $data[2];
-        $task->status = $data[3];
-        $task->priority = $data[4];
+        $task = Task::findOrFail($data['id']);
+        $task->name = $data['name'];
+        $task->deadline = $data['deadline'];
+        $task->priority = $data['priority'];
+        $task->status = $data['status'];
         $task->save();
         return response()->json($task);
     }
