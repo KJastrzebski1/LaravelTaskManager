@@ -31,8 +31,8 @@ $(document).ready(function () {
                 } else {
                     var status = 1;
                     for(var j = 0; j < tasksToAdd.length; j++){
-                        if(tasksToAdd[i]['id']===id){
-                            tasksToAdd.splice(i, 1);
+                        if(tasksToAdd[j]['id']===id){
+                            tasksToAdd.splice(j, 1);
                             status = 0;
                         }
                         
@@ -44,6 +44,7 @@ $(document).ready(function () {
                 tasks.splice(i, 1);
             }
         }
+        localStorage.tasksToAdd = JSON.stringify(tasksToAdd);
         localStorage.taskRepo = JSON.stringify(tasks);
         localStorage.tasksToDelete = JSON.stringify(tasksToDelete);
         $("tr#task-" + id).remove();
@@ -95,10 +96,9 @@ $(document).ready(function () {
                 console.log(response);
             });
         } else {
-            console.log(task);
             if (parseInt(id)) {
                 for (var i = 0; i < tasks.length; i++) {
-                    if (task['id'] === tasks[i]['id']) {
+                    if (id == tasks[i]['id']) {
                         tasks[i] = task;
                     }
                 }
@@ -208,7 +208,7 @@ $(document).ready(function () {
                     var task = tasks[i];
                     if (parseInt(task.id)) {
                         $.post('/edit', {'data': task}, function (response) { //excluded from csrf protection, to fix
-                            console.log(response);
+                            //console.log(response);
                         }).fail(function (xhr, textStatus, error) {
                             console.log(xhr.statusText);
                             console.log(textStatus);
