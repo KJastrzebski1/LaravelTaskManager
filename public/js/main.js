@@ -108,7 +108,6 @@ $(document).ready(function () {
         function updateOnlineStatus(event) {
             var status = navigator.onLine;
             if (status) {
-                //window.location = "/tasks";
                 $(".alert-warning").hide();
 
                 var tasks = JSON.parse(localStorage.taskRepo);

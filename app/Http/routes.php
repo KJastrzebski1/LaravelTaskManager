@@ -34,6 +34,9 @@ Route::group(['middleware' => ['web']], function () {
     Route::put('/task/{task}', 'TaskController@edit');
     Route::post('/edit', 'TaskController@save');
     Route::post('/delete', 'TaskController@destroyAjax');
+    Route::get('/test', function(){
+        return view('test.test');
+    });
     
     Route::auth();
 

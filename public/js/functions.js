@@ -8,9 +8,10 @@ function addTask(task) {
                     task.id = response['id'];
                     tasks.push(task);
                     localStorage.taskRepo = JSON.stringify(tasks);
-                }).fail(function (response) {
-            task = response;
-        });
+                })
+                .fail(function (response) {
+                    task = response;
+                });
     } else {
         if (localStorage.tasksToAdd) {
             tasksToAdd = JSON.parse(localStorage.tasksToAdd);
@@ -72,11 +73,12 @@ function deleteTask(id) {
     } else {
         var tasksToDelete = [];
     }
-    //console.log(id);
     for (var i = 0; i < tasks.length; i++) {
         if (tasks[i]["id"] == id) {
             if (navigator.onLine) {
                 $.post('/delete', {'data': tasks[i]["id"]}, function () {
+                    
+                }).done(function(){
                     response = "deleted";
                 });
             } else {
@@ -97,7 +99,7 @@ function deleteTask(id) {
     localStorage.tasksToAdd = JSON.stringify(tasksToAdd);
     localStorage.taskRepo = JSON.stringify(tasks);
     localStorage.tasksToDelete = JSON.stringify(tasksToDelete);
-    
+
     return response;
 }
 
