@@ -82,5 +82,6 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
     <script type="text/javascript" src="{{ URL::asset('js/sorttable.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('js/main.js') }}"></script>
+    <script type="text/javascript" src="{{ URL::asset('js/functions.js') }}"></script>
 </body>
 </html>

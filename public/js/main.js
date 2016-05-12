@@ -10,42 +10,7 @@ $(function () {
 $(document).ready(function () {
     $(".task-table").on('click', '.delete', function () {
         var id = (this.id.replace('delete-task-', ''));
-        var tasks = JSON.parse(localStorage.taskRepo);
-        var tasksToAdd = [];
-        if(localStorage.tasksToAdd){
-            tasksToAdd = JSON.parse(localStorage.tasksToAdd);
-        }
-        if (localStorage.tasksToDelete) {
-            var tasksToDelete = JSON.parse(localStorage.tasksToDelete);
-        } else {
-            var tasksToDelete = [];
-        }
-        //console.log(id);
-        for (var i = 0; i < tasks.length; i++) {
-            if (tasks[i]["id"] == id) {
-                if (navigator.onLine) {
-                    $.post('/delete', {'data': tasks[i]["id"]}, function (response) {
-
-                    });
-                } else {
-                    var status = 1;
-                    for(var j = 0; j < tasksToAdd.length; j++){
-                        if(tasksToAdd[j]['id']===id){
-                            tasksToAdd.splice(j, 1);
-                            status = 0;
-                        }
-                        
-                    }
-                    if(status){
-                        tasksToDelete.push(tasks[i]["id"]);
-                    }
-                }
-                tasks.splice(i, 1);
-            }
-        }
-        localStorage.tasksToAdd = JSON.stringify(tasksToAdd);
-        localStorage.taskRepo = JSON.stringify(tasks);
-        localStorage.tasksToDelete = JSON.stringify(tasksToDelete);
+        deleteTask(id);
         $("tr#task-" + id).remove();
     });
     $(".task-table").on('click', '.edit', function () {
@@ -80,13 +45,9 @@ $(document).ready(function () {
 
     $(".task-table").on('click', '.save', function () {
         $(this).hide();
-        var tasks = JSON.parse(localStorage.taskRepo);
-        var tasksToAdd = [];
-        if(localStorage.tasksToAdd){
-            tasksToAdd = JSON.parse(localStorage.tasksToAdd);
-        }
+
         var id = (this.id.replace('save-task-', ''));
-       
+
         var task = {
             'id': id,
             'name': $("tr#task-" + id + " .tname input").val(),
@@ -94,36 +55,20 @@ $(document).ready(function () {
             'status': $("tr#task-" + id + " .tstatus select").val(),
             'priority': $("tr#task-" + id + " .tpriority select").val()
         };
-        
-        if (navigator.onLine) {
-            $.post('/edit', {'data': task}, function (response) { //excluded from csrf protection, to fix
-                //console.log(response);
-            });
-        } else {
-            
-            if (parseInt(id)) {
-                for (var i = 0; i < tasks.length; i++) {
-                    if (id == tasks[i]['id']) {
-                        tasks[i] = task;
-                    }
-                }
-            } else {
 
-                for (var i = 0; i < tasksToAdd.length; i++) {
-                    if (id == tasksToAdd[i]['id']) {
-                        tasksToAdd[i] = task;
-                    }
-                }
-            }
-            localStorage.tasksToAdd = JSON.stringify(tasksToAdd);
+        task = editTask(task);
+        if (typeof task === 'object') {
+            id = task.id;
+            $("tr#task-" + id + " .tname").html('<div>' + task['name'] + '</div>');
+            $("tr#task-" + id + " .tdeadline").html('<div>' + task['deadline'] + '</div>');
+            $("tr#task-" + id + " .tstatus").html('<div>' + task['status'] + '%</div>');
+            $("tr#task-" + id + " .tpriority").html('<div>' + task['priority'] + '</div>');
+
+            $('tr#task-' + id + " .edit").show();
+        }else{
+            console.log(typeof task);
         }
-        localStorage.taskRepo = JSON.stringify(tasks);
-        $("tr#task-" + id + " .tname").html('<div>' + task['name'] + '</div>');
-        $("tr#task-" + id + " .tdeadline").html('<div>' + task['deadline'] + '</div>');
-        $("tr#task-" + id + " .tstatus").html('<div>' + task['status'] + '%</div>');
-        $("tr#task-" + id + " .tpriority").html('<div>' + task['priority'] + '</div>');
 
-        $('tr#task-' + id + " .edit").show();
     });
 
     $(".new-task").click(function () {
@@ -133,49 +78,29 @@ $(document).ready(function () {
             'status': $('#task-status').val(),
             'priority': $('#task-priority').val()
         };
-        var tasks = JSON.parse(localStorage.taskRepo);
-        var tasksToAdd = [];
-        if (navigator.onLine) {
-            $.post('/task', {'data': task}, function (response) {
-            })
-                    .done(function (response) {
-                        $(".task-table tbody").append(response['view']);
-                        task.id = response['id'];
-                        tasks.push(task);
-                        localStorage.taskRepo = JSON.stringify(tasks);
-                    });
-        } else {
-            if (localStorage.tasksToAdd) {
-                tasksToAdd = JSON.parse(localStorage.tasksToAdd);
-            } else {
-                tasksToAdd = [];
-            }
-
-
-            task["id"] = 'tmp-' + tasksToAdd.length;
+        task = addTask(task);
+        if (typeof task === 'object') {
             $(".task-table tbody").append(
-                    '<tr id="task-' + task["id"] + '">' +
+                    '<tr id="task-' + task['id'] + '">' +
                     '<td class="table-text tname"><div>' + task['name'] + '</div></td>' +
                     '<td class="table-text tdeadline"><div>' + task['deadline'] + '</div></td>' +
                     '<td class="table-text tstatus"><div>' + task['status'] + '%</div></td>' +
                     '<td class="table-text tpriority"><div>' + task['priority'] + '</div></td>' +
                     '<td>' +
-                    '<button type="submit" id="delete-task-' + task["id"] + '" class="btn btn-danger delete">' +
+                    '<button type="submit" id="delete-task-' + task['id'] + '" class="btn btn-danger delete">' +
                     '<i class="fa fa-btn fa-trash"></i>Delete' +
                     '</button>' +
-                    '<button type="submit" id="edit-task-' + task["id"] + '" class="btn edit">' +
+                    '<button type="submit" id="edit-task-' + task['id'] + '" class="btn edit">' +
                     '<i class="fa fa-btn fa-pencil"></i> Edit' +
                     '</button>' +
-                    '<button id="save-task-' + task["id"] + '" class="btn save">Save</button>' +
+                    '<button id="save-task-' + task['id'] + '" class="btn save">Save</button>' +
                     '</td>' +
                     '</tr>'
                     );
-            tasksToAdd.push(task);
-            tasks.push(task);
-            localStorage.tasksToAdd = JSON.stringify(tasksToAdd);
-            localStorage.taskRepo = JSON.stringify(tasks);
-
+        } else {
+            console.log(typeof task);
         }
+
     });
 
     window.addEventListener('load', function () {
@@ -184,12 +109,14 @@ $(document).ready(function () {
             var status = navigator.onLine;
             if (status) {
                 //window.location = "/tasks";
-                $(".alert-success").show();
+                $(".alert-warning").hide();
+
                 var tasks = JSON.parse(localStorage.taskRepo);
 
                 if (localStorage.tasksToAdd) {
                     var tasksToAdd = JSON.parse(localStorage.tasksToAdd);
                     for (var i = 0; i < tasksToAdd.length; i++) {
+
                         $.post('/task', {'data': tasksToAdd[i]}, function (response) {
 
                         }).done(function (response) {
@@ -197,14 +124,12 @@ $(document).ready(function () {
                                 if (tasksToAdd[i]['id'] === tasks[j]['id'])
                                     tasks[j].id = response['id'];
                             }
-
                         }).fail(function (xhr, textStatus, error) {
                             //console.log(xhr.statusText);
                             //console.log(textStatus);
                             //console.log(error);
                         });
                     }
-
                 }
 
                 for (var i = 0; i < tasks.length; i++) {
@@ -230,7 +155,10 @@ $(document).ready(function () {
                 }
                 localStorage.tasksToAdd = "";
                 localStorage.tasksToDelete = "";
-                //window.location = "/tasks";
+                $.get('/tasks').done(function () {
+                    $(".alert-success").show();
+                });
+
             } else {
                 $(".alert-warning").show();
             }
