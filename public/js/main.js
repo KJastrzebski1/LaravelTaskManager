@@ -15,13 +15,12 @@ $(document).ready(function () {
         if(localStorage.tasksToAdd){
             tasksToAdd = JSON.parse(localStorage.tasksToAdd);
         }
-        
         if (localStorage.tasksToDelete) {
             var tasksToDelete = JSON.parse(localStorage.tasksToDelete);
         } else {
             var tasksToDelete = [];
         }
-        console.log(id);
+        //console.log(id);
         for (var i = 0; i < tasks.length; i++) {
             if (tasks[i]["id"] == id) {
                 if (navigator.onLine) {
@@ -82,8 +81,12 @@ $(document).ready(function () {
     $(".task-table").on('click', '.save', function () {
         $(this).hide();
         var tasks = JSON.parse(localStorage.taskRepo);
-        var tasksToAdd = JSON.parse(localStorage.tasksToAdd);
+        var tasksToAdd = [];
+        if(localStorage.tasksToAdd){
+            tasksToAdd = JSON.parse(localStorage.tasksToAdd);
+        }
         var id = (this.id.replace('save-task-', ''));
+       
         var task = {
             'id': id,
             'name': $("tr#task-" + id + " .tname input").val(),
@@ -91,11 +94,13 @@ $(document).ready(function () {
             'status': $("tr#task-" + id + " .tstatus select").val(),
             'priority': $("tr#task-" + id + " .tpriority select").val()
         };
+        
         if (navigator.onLine) {
             $.post('/edit', {'data': task}, function (response) { //excluded from csrf protection, to fix
-                console.log(response);
+                //console.log(response);
             });
         } else {
+            
             if (parseInt(id)) {
                 for (var i = 0; i < tasks.length; i++) {
                     if (id == tasks[i]['id']) {
@@ -107,14 +112,12 @@ $(document).ready(function () {
                 for (var i = 0; i < tasksToAdd.length; i++) {
                     if (id == tasksToAdd[i]['id']) {
                         tasksToAdd[i] = task;
-                        console.log(tasksToAdd);
                     }
                 }
             }
             localStorage.tasksToAdd = JSON.stringify(tasksToAdd);
-            localStorage.taskRepo = JSON.stringify(tasks);
         }
-
+        localStorage.taskRepo = JSON.stringify(tasks);
         $("tr#task-" + id + " .tname").html('<div>' + task['name'] + '</div>');
         $("tr#task-" + id + " .tdeadline").html('<div>' + task['deadline'] + '</div>');
         $("tr#task-" + id + " .tstatus").html('<div>' + task['status'] + '%</div>');
@@ -196,9 +199,9 @@ $(document).ready(function () {
                             }
 
                         }).fail(function (xhr, textStatus, error) {
-                            console.log(xhr.statusText);
-                            console.log(textStatus);
-                            console.log(error);
+                            //console.log(xhr.statusText);
+                            //console.log(textStatus);
+                            //console.log(error);
                         });
                     }
 
@@ -210,9 +213,9 @@ $(document).ready(function () {
                         $.post('/edit', {'data': task}, function (response) { //excluded from csrf protection, to fix
                             //console.log(response);
                         }).fail(function (xhr, textStatus, error) {
-                            console.log(xhr.statusText);
-                            console.log(textStatus);
-                            console.log(error);
+                            //console.log(xhr.statusText);
+                            //console.log(textStatus);
+                            //console.log(error);
                         });
                     }
                 }
