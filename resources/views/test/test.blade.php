@@ -11,13 +11,13 @@
                 var task = {
                     'name': 'test',
                     'deadline': '2016-05-12',
-                    'status': '0',
+                    'status': '10',
                     'priority': 'Low'
                 };
                 var newTask;
                 
                 assert.equal(newTask = addTask(task), task);
-                 console.log(newTask["id"]);
+                
                 assert.equal(editTask(newTask), newTask);
                
                 assert.equal(deleteTask(newTask), null);

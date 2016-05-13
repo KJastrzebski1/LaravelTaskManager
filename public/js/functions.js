@@ -2,23 +2,24 @@ function addTask(task) {
     var tasks = JSON.parse(localStorage.taskRepo);
     var tasksToAdd = [];
     if (navigator.onLine) {
-        $.post('/task', {'data': task}, function (response) {
-        })
-                .done(function (response) {
-                    task.id = response['id'];
-                    tasks.push(task);
-                    localStorage.taskRepo = JSON.stringify(tasks);
-                })
-                .fail(function (response) {
-                    task = response;
-                });
+        $.ajax({
+            'url': '/task',
+            'method': 'post',
+            'data': {'data': task},
+            'async': false,
+            'success': function (response) {
+                task['id'] = response['id'];
+                tasks.push(task);
+                localStorage.taskRepo = JSON.stringify(tasks);
+            }
+        });
     } else {
         if (localStorage.tasksToAdd) {
             tasksToAdd = JSON.parse(localStorage.tasksToAdd);
         } else {
             tasksToAdd = [];
         }
-        task["id"] = 'tmp-' + tasksToAdd.length;
+        task['id'] = 'tmp-' + tasksToAdd.length;
 
         tasksToAdd.push(task);
         tasks.push(task);
@@ -27,6 +28,7 @@ function addTask(task) {
 
     }
     return task;
+
 }
 
 function editTask(task) {
@@ -37,8 +39,14 @@ function editTask(task) {
         tasksToAdd = JSON.parse(localStorage.tasksToAdd);
     }
     if (navigator.onLine) {
-        $.post('/edit', {'data': task}, function (response) { //excluded from csrf protection, to fix
-            //console.log(response);
+        $.ajax({
+            'url': '/edit',
+            'method': 'post',
+            'data': {'data': task},
+            'async': false,
+            'error': function (response) {
+                task = 'Error';
+            }
         });
     } else {
 
@@ -76,10 +84,14 @@ function deleteTask(id) {
     for (var i = 0; i < tasks.length; i++) {
         if (tasks[i]["id"] == id) {
             if (navigator.onLine) {
-                $.post('/delete', {'data': tasks[i]["id"]}, function () {
-                    
-                }).done(function(){
-                    response = "deleted";
+                $.ajax({
+                    'url': '/delete',
+                    'method': 'post',
+                    'data': {'data': tasks[i]['id']},
+                    'async': false,
+                    'success': function () {
+                        response = "deleted";
+                    }
                 });
             } else {
                 var status = 1;
@@ -99,7 +111,6 @@ function deleteTask(id) {
     localStorage.tasksToAdd = JSON.stringify(tasksToAdd);
     localStorage.taskRepo = JSON.stringify(tasks);
     localStorage.tasksToDelete = JSON.stringify(tasksToDelete);
-
     return response;
 }
 
