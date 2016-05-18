@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateProjectsUserTable extends Migration
+class AddProjectidToTasks extends Migration
 {
     /**
      * Run the migrations.
@@ -12,8 +12,7 @@ class CreateProjectsUserTable extends Migration
      */
     public function up()
     {
-        Schema::create('project_user', function (Blueprint $table) {
-            $table->integer('user_id');
+        Schema::table('tasks', function (Blueprint $table) {
             $table->integer('project_id');
         });
     }
@@ -25,6 +24,7 @@ class CreateProjectsUserTable extends Migration
      */
     public function down()
     {
-        Schema::drop("project_user");
+        Schema::drop('project_id');
+        
     }
 }
