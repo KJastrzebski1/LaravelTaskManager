@@ -9,7 +9,7 @@ use App\Project;
 class ProjectRepository {
 
     /**
-     * Get all of the tasks for a given user.
+     * Get all of the projects for a given user.
      *
      * @param  User  $user
      * @return Collection
@@ -18,6 +18,9 @@ class ProjectRepository {
         return Project::where('user_id', $user->id)
                         ->orderBy('created_at', 'asc')
                         ->get();
+    }
+    public function forAll() {
+        return Project::orderBy('created_at', 'asc')->get();
     }
 
 }

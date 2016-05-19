@@ -33,7 +33,4 @@ class User extends Authenticatable
         return $this->hasMany(Task::class);
     }
     
-    public function projects(){
-        return $this->hasMany(Project::class);
-    }
 }

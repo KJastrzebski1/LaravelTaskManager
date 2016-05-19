@@ -114,3 +114,16 @@ function deleteTask(id) {
     return response;
 }
 
+function addProject(project) {
+    console.log(project);
+    if (navigator.onLine) {
+        $.ajax({
+            'url': '/project',
+            'method': 'post',
+            'data': {'data': project},
+            'async': false,
+            'success': function () {
+            }
+        });
+    }
+}

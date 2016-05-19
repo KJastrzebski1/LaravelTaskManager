@@ -10,6 +10,32 @@
         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
         <strong>Success!</strong> Your data has been synchronized with server.
     </div>
+    @if (Auth::user()->name == 'Manager')
+    <div class="col-sm-offset-2 col-sm-8">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                New Project
+            </div>
+            <div class="panel-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label for="project-name" class="col-sm-3 control-label">Project</label>
+
+                        <div class="col-sm-6">
+                            <input type="text" name="project_name" id="project-name" class="form-control" value="{{ old('task') }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-3 col-sm-6">
+                            <button class="btn btn-default new-project">
+                                <i class="fa fa-btn fa-plus"></i>Save Project
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="col-sm-offset-2 col-sm-8">
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -63,6 +89,16 @@
                             </select>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label for="task-project" class="col-sm-3 control-label">Status</label>
+                        <div class="col-sm-6">
+                            <select class="form-control" id="task-project" name="task_project">
+                                @foreach ($projects as $project)
+                                <option value="{{ $project->id }}">{{ $project->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
                     <!-- Add Task Button -->
                     <div class="form-group">
                         <div class="col-sm-offset-3 col-sm-6">
@@ -74,12 +110,20 @@
                 </div>
             </div>
         </div>
-
+    </div>
+    @endif
+    <div class="col-sm-offset-2 col-sm-8">
         <!-- Current Tasks -->
-        @if (count($tasks) > 0)
-        <div class="panel panel-default">
+        <script>
+            localStorage.taskRepo = "";
+            var task = [];
+        </script>
+        @foreach ($projects as $project)
+        @if (count($tasks[$project->id]) > 0)
+        <div class="panel panel-default" id="project-{{$project->id}}">
             <div class="panel-heading">
-                Current Tasks
+                {{ $project->name }}
+                
             </div>
 
             <div class="panel-body">
@@ -89,24 +133,28 @@
                     <th>Deadline</th>
                     <th>Status</th>
                     <th>Priority</th>
+                    <th>User</th>
                     <th>&nbsp;</th>
                     </thead>
-                    <script>
-                        localStorage.taskRepo = "";
-                        var task = [];</script>
+
                     <tbody>
-                        @foreach ($tasks as $task)
+                        @foreach ($tasks[$project->id] as $task)
                     <script>
+                        if(localStorage.taskRepo){
+                            task = JSON.parse(localStorage.taskRepo);
+                        }
                         task.push({
-                        "id": {{ $task->id }},
+                                "id": {{ $task->id }},
                                 "name": "{{ $task->name }}",
                                 "deadline": "{{ $task->deadline }}",
                                 "status": {{ $task->status }},
                                 "priority": "{{ $task->priority}}"
+                                "user_id": {{ $task->user_id}}
                         });
+                        console.log(task);
                     </script>
-                    @include('tasks.task', ['task' => $task])
-                    @endforeach
+                        @include('tasks.task', ['task' => $task])
+                        @endforeach
                     </tbody>
                 </table>
                 <script>
@@ -115,6 +163,7 @@
             </div>
         </div>
         @endif
+        @endforeach
     </div>
 </div>
 @endsection

@@ -4,6 +4,7 @@
     <td class="table-text tdeadline"><div>{{ $task->deadline }}</div></td>
     <td class="table-text tstatus"><div>{{ $task->status}}%</div></td>
     <td class="table-text tpriority"><div>{{ $task->priority}}</div></td>
+    <td class='table-text tuser'><div>{{ $users[$task->user_id-1]->name }}</div></td>
     <!-- Task Delete Button -->
     <td>
         <button type="submit" id="delete-task-{{ $task->id }}" class="btn btn-danger delete">

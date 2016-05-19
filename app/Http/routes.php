@@ -38,6 +38,7 @@ Route::group(['middleware' => ['web']], function () {
         return view('test.test');
     });
     
+    Route::post('/project', 'ProjectController@store');
     Route::auth();
 
 });

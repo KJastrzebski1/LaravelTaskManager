@@ -8,6 +8,11 @@ $(function () {
 });
 
 $(document).ready(function () {
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
     $(".task-table").on('click', '.delete', function () {
         var id = (this.id.replace('delete-task-', ''));
         deleteTask(id);
@@ -21,7 +26,7 @@ $(document).ready(function () {
                 var task = tasks[i];
             }
         }
-
+        console.log(task);
         $(this).hide();
         $('tr#task-' + id + " .save").show();
         $("tr#task-" + id + " .tname").html('<input type="text" name="name" class="form-control" value="' + task["name"] + '">');
@@ -65,22 +70,29 @@ $(document).ready(function () {
             $("tr#task-" + id + " .tpriority").html('<div>' + task['priority'] + '</div>');
 
             $('tr#task-' + id + " .edit").show();
-        }else{
+        } else {
             console.log(typeof task);
         }
 
     });
-
+    $(".new-project").click(function () {
+        var project = {
+            'name': $('#project-name').val()
+        };
+        project = addProject(project);
+    });
     $(".new-task").click(function () {
         var task = {
             'name': $('#task-name').val(),
             'deadline': $('#task-deadline').val(),
             'status': $('#task-status').val(),
-            'priority': $('#task-priority').val()
+            'priority': $('#task-priority').val(),
+            'project_id': parseInt($('#task-project').val())
         };
+        console.log(task);
         task = addTask(task);
         if (typeof task === 'object') {
-            $(".task-table tbody").append(
+            $("#project-"+task.project_id+" .task-table tbody").append(
                     '<tr id="task-' + task['id'] + '">' +
                     '<td class="table-text tname"><div>' + task['name'] + '</div></td>' +
                     '<td class="table-text tdeadline"><div>' + task['deadline'] + '</div></td>' +

@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use DB;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Task;
+use App\Project;
+use App\User;
+use App\Repositories\ProjectRepository;
 use App\Repositories\TaskRepository;
 
 class TaskController extends Controller {
@@ -36,8 +40,28 @@ class TaskController extends Controller {
      * @return Response
      */
     public function index(Request $request) {
+        $user = $request->user();
+        $projects = Project::get();
+        $users = User::get();
+        $p = new Project();
+        $p->name = 'Default';
+        $p->id = 0;
+        $projects[] = $p;
+        $tasks = [];
+        if ($user->role == 'Manager') {
+            foreach ($projects as $project) {
+                $tasks[$project->id] = $this->tasks->forProject($project);
+            }
+        }else{
+            foreach ($projects as $project) {
+                $tasks[$project->id] = $this->tasks->forUser($user, $project);
+            }
+        }
+
         return view('tasks.index', [
-            'tasks' => $this->tasks->forUser($request->user()),
+            'tasks' => $tasks,
+            'projects' => $projects,
+            'users' => $users,
         ]);
     }
 
@@ -54,10 +78,11 @@ class TaskController extends Controller {
             "deadline" => $data["deadline"],
             "priority" => $data["priority"],
             "status" => $data["status"],
+            "project_id" => $data["project_id"],
         ]);
-        return ['view' => (string)view('tasks.task', ['task' => $task]), 'id' => $task['id']];//redirect('/tasks');
+        return ['view' => (string) view('tasks.task', ['task' => $task]), 'id' => $task['id']]; //redirect('/tasks');
     }
-    
+
     /*
      * 
      */
@@ -107,7 +132,6 @@ class TaskController extends Controller {
      * @param  Task  $task
      * @return Response
      */
-    
     public function destroy(Request $request, Task $task) {
         $this->authorize('destroy', $task);
 
