@@ -40,14 +40,7 @@ Route::group(['middleware' => ['web']], function () {
     
     Route::post('/project', 'ProjectController@store');
     
-    Route::get('/users', function(){
-        $users = App\User::get();
-        $u = new App\User();
-        $u->name = 'No Worker';
-        $u->id = 0;
-        $users[] = $u;
-        return response()->json($users);
-    });
+    Route::get('/users', 'UserController@getUsers');
     Route::auth();
 
 });

@@ -124,7 +124,11 @@ class TaskController extends Controller {
         $task->deadline = $data['deadline'];
         $task->priority = $data['priority'];
         $task->status = $data['status'];
-        $task->user_id = $data['user_id'];
+        $user = $request->user();
+        if($user->role == 'Manager'){
+            $task->user_id = $data['user_id'];
+        }
+        
         $task->save();
         return response()->json($task);
     }

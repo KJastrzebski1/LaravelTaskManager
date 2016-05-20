@@ -117,6 +117,7 @@
         <script>
             localStorage.taskRepo = "";
             var task = [];
+            permission = {{ $permission ? 1 : 0 }};
         </script>
         @foreach ($projects as $project)
         @if (count($tasks[$project->id]) > 0)
@@ -146,14 +147,17 @@
                             if(localStorage.taskRepo){
                                task = JSON.parse(localStorage.taskRepo);
                             }
-                            task.push({
+                            var tmp = {
                                 "id": {{ $task->id }},
                                 "name": "{{ $task->name }}",
                                 "deadline": "{{ $task->deadline }}",
                                 "status": {{ $task->status }},
-                                "priority": "{{ $task->priority}}",
-                                "user_id": {{ $task->user_id}}
-                            });
+                                "priority": "{{ $task->priority}}"
+                            }
+                            if(permission){
+                                tmp["user_id"] = {{ $task->user_id}};
+                            }
+                            task.push(tmp);
                             localStorage.taskRepo = JSON.stringify(task);
                         </script>
                         @include('tasks.task', ['task' => $task])
