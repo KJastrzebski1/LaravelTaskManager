@@ -42,7 +42,7 @@ class TaskController extends Controller {
     public function index(Request $request) {
         $user = $request->user();
         $projects = Project::get();
-        
+        $permission = ($user->role == 'Manager');
         $p = new Project();
         $p->name = 'Default';
         $p->id = 0;
@@ -56,7 +56,7 @@ class TaskController extends Controller {
             $users[$ut->id] = $ut;
         }
         $tasks = [];
-        if ($user->role == 'Manager') {
+        if ($permission) {
             foreach ($projects as $project) {
                 $tasks[$project->id] = $this->tasks->forProject($project);
             }
@@ -65,12 +65,15 @@ class TaskController extends Controller {
                 $tasks[$project->id] = $this->tasks->forUser($user, $project);
             }
         }
-
-        return view('tasks.index', [
+        $args = [
             'tasks' => $tasks,
             'projects' => $projects,
-            'users' => $users,
-        ]);
+            'permission' => $permission,
+        ];
+        if($permission){
+            $args['users'] = $users;
+        }
+        return view('tasks.index', $args);
     }
 
     /**

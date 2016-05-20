@@ -133,7 +133,9 @@
                     <th>Deadline</th>
                     <th>Status</th>
                     <th>Priority</th>
+                    @if($permission)
                     <th>User</th>
+                    @endif
                     <th>&nbsp;</th>
                     </thead>
 
