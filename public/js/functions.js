@@ -30,7 +30,21 @@ function addTask(task) {
     return task;
 
 }
-
+function getUsers(){
+    var users = [];
+    $.ajax({
+            'url': '/users',
+            'method': 'get',
+            'async': false,
+            'error': function (response) {
+                task = 'Error';
+            },
+            'success': function(response){
+                users = response;
+            }
+        });
+    return users;
+}
 function editTask(task) {
     var id = task.id;
     var tasks = JSON.parse(localStorage.taskRepo);

@@ -42,11 +42,19 @@ class TaskController extends Controller {
     public function index(Request $request) {
         $user = $request->user();
         $projects = Project::get();
-        $users = User::get();
+        
         $p = new Project();
         $p->name = 'Default';
         $p->id = 0;
         $projects[] = $p;
+        $users[0] = new User();
+        $users[0]->name = 'No Worker';
+        $users[0]->id = 0;
+        $u = User::get();
+        
+        foreach($u as $ut){
+            $users[$ut->id] = $ut;
+        }
         $tasks = [];
         if ($user->role == 'Manager') {
             foreach ($projects as $project) {
@@ -113,6 +121,7 @@ class TaskController extends Controller {
         $task->deadline = $data['deadline'];
         $task->priority = $data['priority'];
         $task->status = $data['status'];
+        $task->user_id = $data['user_id'];
         $task->save();
         return response()->json($task);
     }

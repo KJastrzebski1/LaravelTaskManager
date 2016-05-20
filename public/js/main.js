@@ -26,7 +26,6 @@ $(document).ready(function () {
                 var task = tasks[i];
             }
         }
-        console.log(task);
         $(this).hide();
         $('tr#task-' + id + " .save").show();
         $("tr#task-" + id + " .tname").html('<input type="text" name="name" class="form-control" value="' + task["name"] + '">');
@@ -46,6 +45,15 @@ $(document).ready(function () {
                 '<option value="Immediate">Immediate</option>' +
                 '</select>');
         $("tr#task-" + id + " .tpriority select").val(task["priority"]);
+        var users = getUsers();
+        console.log(users);
+        var user = '<select class="form-control" name="status">';
+        for( var i = 0; i < users.length; i++){
+            user += '<option value=' + users[i].id + '>' + users[i].name + '</option>';
+        }
+        user += '</select>';
+        $("tr#task-" + id + " .tuser").html(user);
+        $("tr#task-" + id + " .tuser select").val(task["user_id"]);
     });
 
     $(".task-table").on('click', '.save', function () {
@@ -58,9 +66,10 @@ $(document).ready(function () {
             'name': $("tr#task-" + id + " .tname input").val(),
             'deadline': $("tr#task-" + id + " .tdeadline input").val(),
             'status': $("tr#task-" + id + " .tstatus select").val(),
-            'priority': $("tr#task-" + id + " .tpriority select").val()
+            'priority': $("tr#task-" + id + " .tpriority select").val(),
+            'user_id': $("tr#task-" + id + " .tuser select").val()
         };
-
+        var user_name = $("tr#task-" + id + " .tuser select option:selected").text();
         task = editTask(task);
         if (typeof task === 'object') {
             id = task.id;
@@ -68,7 +77,7 @@ $(document).ready(function () {
             $("tr#task-" + id + " .tdeadline").html('<div>' + task['deadline'] + '</div>');
             $("tr#task-" + id + " .tstatus").html('<div>' + task['status'] + '%</div>');
             $("tr#task-" + id + " .tpriority").html('<div>' + task['priority'] + '</div>');
-
+            $("tr#task-" + id + " .tuser").html('<div>' + user_name + '</div>');
             $('tr#task-' + id + " .edit").show();
         } else {
             console.log(typeof task);
@@ -98,6 +107,7 @@ $(document).ready(function () {
                     '<td class="table-text tdeadline"><div>' + task['deadline'] + '</div></td>' +
                     '<td class="table-text tstatus"><div>' + task['status'] + '%</div></td>' +
                     '<td class="table-text tpriority"><div>' + task['priority'] + '</div></td>' +
+                    '<td class="table-text tuser"><div>' + task['user_id'] + '</div></td>' +
                     '<td>' +
                     '<button type="submit" id="delete-task-' + task['id'] + '" class="btn btn-danger delete">' +
                     '<i class="fa fa-btn fa-trash"></i>Delete' +

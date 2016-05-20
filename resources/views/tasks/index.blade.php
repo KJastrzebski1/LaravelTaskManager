@@ -139,27 +139,25 @@
 
                     <tbody>
                         @foreach ($tasks[$project->id] as $task)
-                    <script>
-                        if(localStorage.taskRepo){
-                            task = JSON.parse(localStorage.taskRepo);
-                        }
-                        task.push({
+                        <script>
+                            
+                            if(localStorage.taskRepo){
+                               task = JSON.parse(localStorage.taskRepo);
+                            }
+                            task.push({
                                 "id": {{ $task->id }},
                                 "name": "{{ $task->name }}",
                                 "deadline": "{{ $task->deadline }}",
                                 "status": {{ $task->status }},
-                                "priority": "{{ $task->priority}}"
+                                "priority": "{{ $task->priority}}",
                                 "user_id": {{ $task->user_id}}
-                        });
-                        console.log(task);
-                    </script>
+                            });
+                            localStorage.taskRepo = JSON.stringify(task);
+                        </script>
                         @include('tasks.task', ['task' => $task])
                         @endforeach
                     </tbody>
                 </table>
-                <script>
-                    localStorage.taskRepo = JSON.stringify(task);
-                </script>
             </div>
         </div>
         @endif
