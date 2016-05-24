@@ -91,7 +91,16 @@ class TaskController extends Controller {
             "status" => $data["status"],
             "project_id" => $data["project_id"],
         ]);
-        return ['view' => (string) view('tasks.task', ['task' => $task]), 'id' => $task['id']]; //redirect('/tasks');
+        $users[0] = new User();
+        $users[0]->name = 'No Worker';
+        $users[0]->id = 0;
+        $u = User::get();
+        
+        foreach($u as $ut){
+            $users[$ut->id] = $ut;
+        }
+        $permission = ($request->user()->role == 'Manager');
+        return ['view' => (string) view('tasks.task', ['task' => $task, 'permission' => $permission, 'users' => $users]), 'id' => $task['id']]; //redirect('/tasks');
     }
 
     /*

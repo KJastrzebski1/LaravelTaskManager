@@ -105,7 +105,6 @@ $(document).ready(function () {
             'priority': $('#task-priority').val(),
             'project_id': parseInt($('#task-project').val())
         };
-        console.log(task);
         task = addTask(task);
         if (typeof task === 'object') {
             $("#project-" + task.project_id + " .task-table tbody").append(

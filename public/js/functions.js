@@ -1,3 +1,4 @@
+
 function addTask(task) {
     var tasks = JSON.parse(localStorage.taskRepo);
     var tasksToAdd = [];
@@ -12,6 +13,7 @@ function addTask(task) {
                 tasks.push(task);
                 localStorage.taskRepo = JSON.stringify(tasks);
             }
+            
         });
     } else {
         if (localStorage.tasksToAdd) {
@@ -30,19 +32,19 @@ function addTask(task) {
     return task;
 
 }
-function getUsers(){
+function getUsers() {
     var users = [];
     $.ajax({
-            'url': '/users',
-            'method': 'get',
-            'async': false,
-            'error': function (response) {
-                task = 'Error';
-            },
-            'success': function(response){
-                users = response;
-            }
-        });
+        'url': '/users',
+        'method': 'get',
+        'async': false,
+        'error': function (response) {
+            task = 'Error';
+        },
+        'success': function (response) {
+            users = response;
+        }
+    });
     return users;
 }
 function editTask(task) {
