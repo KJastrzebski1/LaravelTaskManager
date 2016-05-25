@@ -148,17 +148,11 @@ $(document).ready(function () {
                     var tasksToAdd = JSON.parse(localStorage.tasksToAdd);
                     for (var i = 0; i < tasksToAdd.length; i++) {
 
-                        $.post('/task', {'data': tasksToAdd[i]}, function (response) {
-
-                        }).done(function (response) {
+                        addTask(tasksToAdd[i]).then(function (response) {
                             for (var j = tasks.length; j > 0; j--) {
                                 if (tasksToAdd[i]['id'] === tasks[j]['id'])
                                     tasks[j].id = response['id'];
                             }
-                        }).fail(function (xhr, textStatus, error) {
-                            //console.log(xhr.statusText);
-                            //console.log(textStatus);
-                            //console.log(error);
                         });
                     }
                 }
@@ -166,21 +160,14 @@ $(document).ready(function () {
                 for (var i = 0; i < tasks.length; i++) {
                     var task = tasks[i];
                     if (parseInt(task.id)) {
-                        $.post('/edit', {'data': task}, function (response) { //excluded from csrf protection, to fix
-                            //console.log(response);
-                        }).fail(function (xhr, textStatus, error) {
-                            //console.log(xhr.statusText);
-                            //console.log(textStatus);
-                            //console.log(error);
-                        });
+                        editTask(task);
                     }
                 }
                 if (localStorage.tasksToDelete) {
                     var tasksToDelete = JSON.parse(localStorage.tasksToDelete);
                     for (var i = 0; i < tasksToDelete.length; i++) {
-                        $.post('/delete', {'data': tasksToDelete[i]}, function (response) {
-
-                        });
+                        
+                        deleteTask(tasksToDelete[i]);
                     }
                     localStorage.tasksToDelete = "";
                 }

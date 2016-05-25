@@ -83,6 +83,7 @@ class TaskController extends Controller {
      * @return Response
      */
     public function store(Request $request) {
+        $this->authorize('isManager', $request->user());
         $data = $request["data"];
         $task = Task::create([
             "name" => $data["name"],
@@ -100,34 +101,15 @@ class TaskController extends Controller {
         foreach($u as $ut){
             $users[$ut->id] = $ut;
         }
-        $permission = ($request->user()->role == 'Manager');
-        return [/*'view' => (string) view('tasks.task', ['task' => $task, 'permission' => $permission, 'users' => $users]), */'task' => $task]; //redirect('/tasks');
+        return ['task' => $task]; //redirect('/tasks');
     }
 
     /*
      * 
      */
 
-    public function update(Request $request, Task $task) {
-        $this->validate($request, [
-            'name' => 'required|max:255',
-            'deadline' => 'required',
-            'status' => 'required',
-            'priority' => 'required',
-        ]);
-        $task->name = $request->name;
-        $task->deadline = $request->deadline;
-        $task->priority = $request->priority;
-        $task->status = $request->status;
-        $task->save();
-        return redirect('/tasks');
-    }
 
-    /*
-     * 
-     */
-
-    public function save(Request $request) {
+    public function edit(Request $request) {
         $data = $request['data'];
         $task = Task::findOrFail($data['id']);
         $task->name = $data['name'];
@@ -144,9 +126,10 @@ class TaskController extends Controller {
     }
 
     public function destroyAjax(Request $request) {
+        $this->authorize('isManager', $request->user());
         $data = $request['data'];
         $task = Task::findOrFail($data);
-        $this->authorize('destroy', $task);
+        
         $task->delete();
         return 'deleted';
     }

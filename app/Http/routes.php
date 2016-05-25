@@ -31,8 +31,8 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/tasks', 'TaskController@index');
     Route::post('/task', 'TaskController@store');
     Route::delete('/task/{task}', 'TaskController@destroy');
-    Route::put('/task/{task}', 'TaskController@edit');
-    Route::post('/edit', 'TaskController@save');
+    //Route::put('/task/{task}', 'TaskController@edit');
+    Route::post('/edit', 'TaskController@edit');
     Route::post('/delete', 'TaskController@destroyAjax');
     Route::get('/test', function(){
         return view('test.test');

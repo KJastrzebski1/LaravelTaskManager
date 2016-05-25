@@ -8,7 +8,8 @@ use App\Http\Requests;
 
 class UserController extends Controller
 {
-    public function getUsers(){
+    public function getUsers(Request $request){
+        $this->authorize('isManager', $request->user());
         $users = User::get();
         $u = new User();
         $u->name = 'No Worker';

@@ -26,18 +26,20 @@
                     'project_id': 0,
                     'user_id': {{ Auth::user()->id }}
                 };
+                
             QUnit.test("Testing task manipulation", function (assert) {
-                expect(0);
+                var done = assert.async();
                 
-                
-                addTask(task).then(function(response){
-                    assert.notEqual(response['id'], null);
-                    assert.equal(editTask(response), response);
+                    addTask(task).then(function(response){
+                        assert.notEqual(response['id'], null, 'Added New Task');
+                        assert.equal(editTask(response), response, 'Task edited');
 
-                    assert.equal(deleteTask(response), null);
-                    assert.equal(deleteTask(response["id"]), "deleted");
-                });
-                
+                        assert.equal(deleteTask(response), null, 'Exception for bad argument works');
+                        assert.equal(deleteTask(response["id"]), "deleted", 'Deleted');
+                        setTimeout(function(){
+                            done();
+                        },1000);
+                    });
             });
         </script>
         <div id="qunit"></div>
