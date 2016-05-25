@@ -133,8 +133,6 @@ $(document).ready(function () {
                 console.log(typeof task);
             }
         });
-
-
     });
 
     window.addEventListener('load', function () {

@@ -18,9 +18,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-            QUnit.test("Testing task manipulation", function (assert) {
-                expect(0);
-                var task = {
+            var task = {
                     'name': 'test',
                     'deadline': '2016-05-12',
                     'status': '10',
@@ -28,6 +26,9 @@
                     'project_id': 0,
                     'user_id': {{ Auth::user()->id }}
                 };
+            QUnit.test("Testing task manipulation", function (assert) {
+                expect(0);
+                
                 
                 addTask(task).then(function(response){
                     assert.notEqual(response['id'], null);
