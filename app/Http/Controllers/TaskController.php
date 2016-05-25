@@ -84,12 +84,13 @@ class TaskController extends Controller {
      */
     public function store(Request $request) {
         $data = $request["data"];
-        $task = $request->user()->tasks()->create([
+        $task = Task::create([
             "name" => $data["name"],
             "deadline" => $data["deadline"],
             "priority" => $data["priority"],
             "status" => $data["status"],
             "project_id" => $data["project_id"],
+            "user_id" => 0,
         ]);
         $users[0] = new User();
         $users[0]->name = 'No Worker';
@@ -100,7 +101,7 @@ class TaskController extends Controller {
             $users[$ut->id] = $ut;
         }
         $permission = ($request->user()->role == 'Manager');
-        return ['view' => (string) view('tasks.task', ['task' => $task, 'permission' => $permission, 'users' => $users]), 'id' => $task['id']]; //redirect('/tasks');
+        return [/*'view' => (string) view('tasks.task', ['task' => $task, 'permission' => $permission, 'users' => $users]), */'task' => $task]; //redirect('/tasks');
     }
 
     /*

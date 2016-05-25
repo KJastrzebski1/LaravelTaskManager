@@ -2,34 +2,37 @@
 function addTask(task) {
     var tasks = JSON.parse(localStorage.taskRepo);
     var tasksToAdd = [];
-    if (navigator.onLine) {
-        $.ajax({
-            'url': '/task',
-            'method': 'post',
-            'data': {'data': task},
-            'async': false,
-            'success': function (response) {
-                task['id'] = response['id'];
-                tasks.push(task);
-                localStorage.taskRepo = JSON.stringify(tasks);
-            }
-            
-        });
-    } else {
-        if (localStorage.tasksToAdd) {
-            tasksToAdd = JSON.parse(localStorage.tasksToAdd);
+    
+    return new Promise(function (resolve, reject) {
+        if (navigator.onLine) {
+            $.ajax({
+                'url': '/task',
+                'method': 'post',
+                'data': {'data': task},
+                'async': true,
+                'success': function (response) {
+                    task = response['task'];
+                    tasks.push(task);
+                    localStorage.taskRepo = JSON.stringify(tasks);
+                    resolve(task);
+                }
+            });
         } else {
-            tasksToAdd = [];
+            if (localStorage.tasksToAdd) {
+                tasksToAdd = JSON.parse(localStorage.tasksToAdd);
+            } else {
+                tasksToAdd = [];
+            }
+            task['id'] = 'tmp-' + tasksToAdd.length;
+            task['user_id'] = 0;
+            tasksToAdd.push(task);
+            tasks.push(task);
+            localStorage.tasksToAdd = JSON.stringify(tasksToAdd);
+            localStorage.taskRepo = JSON.stringify(tasks);
+            resolve(task);
         }
-        task['id'] = 'tmp-' + tasksToAdd.length;
-
-        tasksToAdd.push(task);
-        tasks.push(task);
-        localStorage.tasksToAdd = JSON.stringify(tasksToAdd);
-        localStorage.taskRepo = JSON.stringify(tasks);
-
-    }
-    return task;
+    });
+    //return task;
 
 }
 function getUsers() {

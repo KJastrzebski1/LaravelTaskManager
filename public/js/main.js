@@ -74,7 +74,7 @@ $(document).ready(function () {
             task.user_id = $("tr#task-" + id + " .tuser select").val();
             var user_name = $("tr#task-" + id + " .tuser select option:selected").text();
         }
-        
+
         task = editTask(task);
         if (typeof task === 'object') {
             id = task.id;
@@ -105,29 +105,35 @@ $(document).ready(function () {
             'priority': $('#task-priority').val(),
             'project_id': parseInt($('#task-project').val())
         };
-        task = addTask(task);
-        if (typeof task === 'object') {
-            $("#project-" + task.project_id + " .task-table tbody").append(
-                    '<tr id="task-' + task['id'] + '">' +
-                    '<td class="table-text tname"><div>' + task['name'] + '</div></td>' +
-                    '<td class="table-text tdeadline"><div>' + task['deadline'] + '</div></td>' +
-                    '<td class="table-text tstatus"><div>' + task['status'] + '%</div></td>' +
-                    '<td class="table-text tpriority"><div>' + task['priority'] + '</div></td>' +
-                    '<td class="table-text tuser"><div>' + task['user_id'] + '</div></td>' +
-                    '<td>' +
-                    '<button type="submit" id="delete-task-' + task['id'] + '" class="btn btn-danger delete">' +
-                    '<i class="fa fa-btn fa-trash"></i>Delete' +
-                    '</button>' +
-                    '<button type="submit" id="edit-task-' + task['id'] + '" class="btn edit">' +
-                    '<i class="fa fa-btn fa-pencil"></i> Edit' +
-                    '</button>' +
-                    '<button id="save-task-' + task['id'] + '" class="btn save">Save</button>' +
-                    '</td>' +
-                    '</tr>'
-                    );
-        } else {
-            console.log(typeof task);
-        }
+        //task = addTask(task);
+        addTask(task).then(function (response) {
+            if (typeof response === 'object') 
+            {
+                var users = getUsers();
+                console.log(response);
+                $("#project-" + response['project_id'] + " .task-table tbody").append(
+                        '<tr id="task-' + response['id'] + '">' +
+                        '<td class="table-text tname"><div>' + response['name'] + '</div></td>' +
+                        '<td class="table-text tdeadline"><div>' + response['deadline'] + '</div></td>' +
+                        '<td class="table-text tstatus"><div>' + response['status'] + '%</div></td>' +
+                        '<td class="table-text tpriority"><div>' + response['priority'] + '</div></td>' +
+                        '<td class="table-text tuser"><div>' + users[response.user_id.id].name + '</div></td>' +
+                        '<td>' +
+                        '<button type="submit" id="delete-task-' + response['id'] + '" class="btn btn-danger delete">' +
+                        '<i class="fa fa-btn fa-trash"></i>Delete' +
+                        '</button>' +
+                        '<button type="submit" id="edit-task-' + response['id'] + '" class="btn edit">' +
+                        '<i class="fa fa-btn fa-pencil"></i> Edit' +
+                        '</button>' +
+                        '<button id="save-task-' + response['id'] + '" class="btn save">Save</button>' +
+                        '</td>' +
+                        '</tr>'
+                        );
+            } else{
+                console.log(typeof task);
+            }
+        });
+
 
     });
 

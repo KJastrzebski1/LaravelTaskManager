@@ -19,6 +19,7 @@
                 }
             });
             QUnit.test("Testing task manipulation", function (assert) {
+                expect(0);
                 var task = {
                     'name': 'test',
                     'deadline': '2016-05-12',
@@ -27,14 +28,15 @@
                     'project_id': 0,
                     'user_id': {{ Auth::user()->id }}
                 };
-                var newTask;
-                newTask = addTask(task);
-                assert.notEqual(newTask['id'], null);
-                console.log(newTask['id']);
-                assert.equal(editTask(newTask), newTask);
+                
+                addTask(task).then(function(response){
+                    assert.notEqual(response['id'], null);
+                    assert.equal(editTask(response), response);
 
-                assert.equal(deleteTask(newTask), null);
-                assert.equal(deleteTask(newTask["id"]), "deleted");
+                    assert.equal(deleteTask(response), null);
+                    assert.equal(deleteTask(response["id"]), "deleted");
+                });
+                
             });
         </script>
         <div id="qunit"></div>
