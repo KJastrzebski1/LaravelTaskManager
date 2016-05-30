@@ -63,6 +63,7 @@
                             </a>
 
                             <ul class="dropdown-menu" role="menu">
+                                <li><a href="{{ url('/organization')}}">Your organizations</a></li>
                                 <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
                             </ul>
                         </li>
@@ -83,5 +84,6 @@
     <script type="text/javascript" src="{{ URL::asset('js/sorttable.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('js/main.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('js/functions.js') }}"></script>
+    <script type="text/javascript" src="{{ URL::asset('js/bootstrap-filestyle.min.js') }}"></script>
 </body>
 </html>

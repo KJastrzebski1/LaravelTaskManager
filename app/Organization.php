@@ -9,7 +9,12 @@ class Organization extends Model
     protected $fillable = [
         'name',
         'ceo_id',
-        'logo'
+        'logo',
+        'user_ids',
+    ];
+    
+    protected $casts = [
+        'ceo_id' => 'int'
     ];
     
     public function users(){

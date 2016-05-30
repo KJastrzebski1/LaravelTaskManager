@@ -40,6 +40,10 @@ Route::group(['middleware' => ['web']], function () {
     
     Route::post('/project', 'ProjectController@store');
     
+    Route::any('/organization', 'OrgController@index');
+    Route::get('/createorg', 'OrgController@create');
+    Route::post('/neworg', 'OrgController@newOrg');
+    
     Route::get('/users', 'UserController@getUsers');
     Route::auth();
 
