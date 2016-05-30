@@ -8,7 +8,9 @@
                 <div class="panel-heading">Welcome</div>
 
                 <div class="panel-body">
-                    Your Application's Landing Page.
+                    @if (Auth::guest())
+                    <h4>Hi! Please <a href="{{ url('/login') }}">Login</a> or <a href="{{ url('/register') }}">Register</a></h4>
+                    @endif
                 </div>
             </div>
         </div>
