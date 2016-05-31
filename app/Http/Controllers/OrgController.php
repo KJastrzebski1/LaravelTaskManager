@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Repositories\OrgRepository;
 use App\Organization;
+use App\User;
 use App\Http\Requests;
 use Folklore\Image\Facades\Image;
 
@@ -33,6 +34,7 @@ class OrgController extends Controller {
         $this->authorize('manage', $org);
         return view('organization.manage', ['org' => $org]);
     }
+    
 
     public function newOrg(Request $request) {
         $path = 'uploads/';
@@ -43,6 +45,7 @@ class OrgController extends Controller {
             $org = Organization::create([
                         'name' => $request->organization_name,
                         'logo' => $path . $logo,
+                        'ceo_id' => $request->user()->id,
             ]);
             $file->move($path, $logo);
             Image::make($path . $logo, array(

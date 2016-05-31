@@ -45,6 +45,9 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/createorg', 'OrgController@create');
     Route::post('/neworg', 'OrgController@newOrg');
     
+    
+    Route::post('/organization/{id}/invite', 'MessageController@invite');
+    
     Route::get('/users', 'UserController@getUsers');
     Route::auth();
 
