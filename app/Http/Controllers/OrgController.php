@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Repositories\OrgRepository;
 use App\Organization;
 use App\User;
+use App\Message;
 use App\Http\Requests;
 use Folklore\Image\Facades\Image;
 
@@ -19,8 +20,21 @@ class OrgController extends Controller {
 
     public function index(Request $request) {
         $orgs = Organization::get();
+        $norgs =[];
+        foreach ($orgs as $org){
+            $norgs[$org->id] = $org;
+        }
+        $messages = Message::get();
+        $nmessages = [];
+        foreach ($messages as $message){
+            if($message->user_id === $request->user()->id){
+                $nmessages[]=$message;
+            }
+        }
+        
         $args = [
-            'organizations' => $orgs,
+            'organizations' => $norgs,
+            'messages' => $nmessages,
         ];
         return view('organization.index', $args);
     }

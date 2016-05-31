@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateInvitesTable extends Migration
+class CreateMessagesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,10 +12,11 @@ class CreateInvitesTable extends Migration
      */
     public function up()
     {
-        Schema::create('invites', function (Blueprint $table) {
+        Schema::create('messages', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id');
             $table->integer('org_id');
+            $table->timestamps();
         });
     }
 
@@ -26,6 +27,6 @@ class CreateInvitesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('invites');
+        Schema::drop('messages');
     }
 }

@@ -13,5 +13,7 @@ use App\User;
 use App\Organization;
 
 class OrgRepository {
-    //put your code here
+    public function forUser(User $user){
+        return Organization::where('user_ids');
+    }
 }

@@ -24,8 +24,13 @@ class MessageController extends Controller {
         if ($user) {
 
             $this->authorize('manage', $org);
-            $users = unserialize($org->user_ids);
-            if (!in_array($users, $user->id)) {
+            if($org->user_ids){
+                $users = unserialize($org->user_ids);
+            }else{
+                $users = [];
+            }
+            
+            if (!in_array($user->id, $users)) {
                 Message::create([
                     'user_id' => $user->id,
                     'org_id' => $org->id
