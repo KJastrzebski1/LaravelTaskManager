@@ -14,15 +14,25 @@
                 Your Organizations
             </div>
             <div class="panel-body">
-                @if($organizations)
+                <table class="table table-striped task-table sortable">
+                
+                @if(!$organizations->isEmpty())
+                <thead>
+                    <th>Logo</th>
+                    <th>Name</th>
+                </thead>
+                <tbody>
                     @foreach($organizations as $organization)
-                    <div>
-                        {{ $organization }}
-                    </div>
+                    <tr>
+                        <td><img src="{{ $organization->logo }}"></td>
+                        <td>{{ $organization->name }}</td>
+                    </tr>
                     @endforeach
+                </tbody>
                 @else
                 You aren't in any organization. <a href="{{ url('/createorg')}}">Create new organization</a>
                 @endif
+                </table>
             </div>
             @endif
         </div>

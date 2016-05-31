@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Repositories\OrgRepository;
 use App\Organization;
 use App\Http\Requests;
+use Folklore\Image\Facades\Image;
 
 class OrgController extends Controller
 {
@@ -17,9 +18,9 @@ class OrgController extends Controller
 
 
     public function index(Request $request){
-        
+        $orgs = Organization::get();
         $args = [
-            'organizations' => [],
+            'organizations' => $orgs,
         ];
         return view('organization.index', $args);
     }
@@ -29,14 +30,18 @@ class OrgController extends Controller
     }
     
     public function newOrg(Request $request){
-        $path = '../uploads/';
+        $path = 'uploads/';
         $file = $request->file('organization_logo');
-        $logo = $request->organization_name.'_logo.'.$file->getClientOriginalExtension();
+        $logo = str_replace(' ', '_', $request->organization_name).'_logo.'.$file->getClientOriginalExtension();
         $file->move($path, $logo);
+        Image::make($path.$logo, array(
+            'width' => 150,
+            'height' => 150,
+        ))->save($path.$logo);
         $org = Organization::create([
             'name' => $request->organization_name,
             'logo' => $path.$logo,
         ]);
-        return view('organization.indexs');
+        return redirect('/organization');
     }
 }
