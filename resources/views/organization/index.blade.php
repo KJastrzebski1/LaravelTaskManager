@@ -20,15 +20,23 @@
                 <thead>
                     <th>Logo</th>
                     <th>Name</th>
+                    <th>Manage</th>
                 </thead>
                 <tbody>
                     @foreach($organizations as $organization)
                     <tr>
                         <td><img src="{{ $organization->logo }}"></td>
                         <td>{{ $organization->name }}</td>
+                        <td><a href="/organization/{{$organization->id}}" class="btn">Manage</a></td>
                     </tr>
                     @endforeach
+                    
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <td><a href="{{ url('/createorg')}}">Create new organization</a></td>
+                    </tr>
+                </tfoot>
                 @else
                 You aren't in any organization. <a href="{{ url('/createorg')}}">Create new organization</a>
                 @endif

@@ -41,6 +41,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('/project', 'ProjectController@store');
     
     Route::any('/organization', 'OrgController@index');
+    Route::any('/organization/{id}', 'OrgController@manage');
     Route::get('/createorg', 'OrgController@create');
     Route::post('/neworg', 'OrgController@newOrg');
     

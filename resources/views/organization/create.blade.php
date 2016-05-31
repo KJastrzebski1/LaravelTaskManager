@@ -2,6 +2,12 @@
 
 @section('content')
 <div class="container">
+    @if(isset($error))
+    <div class="alert alert-warning"  style="display: block">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>Something went wrong!</strong> {{ $error}}
+    </div>
+    @endif
     <div class="col-sm-offset-2 col-sm-8">
         <div class="panel panel-default">
             <div class="panel-heading">
