@@ -9,9 +9,16 @@
 namespace App\Repositories;
 
 use App\User;
+use App\Message;
 use App\Organization;
 
 
-class InvitesRepository {
-    //put your code here
+class MessageRepository {
+    
+    public function isInvited(User $user, Organization $org){
+        $msg = Message::get()->where('user_id', $user->id)->where('org_id', $org->id);
+        
+        return !$msg->isEmpty();
+    }
+    
 }

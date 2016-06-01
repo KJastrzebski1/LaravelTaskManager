@@ -9,7 +9,7 @@
                 Your Organizations
             </div>
             <div class="panel-body">
-                <table class="table table-striped task-table sortable">
+                <table class="table table-striped organization-table sortable">
 
                     @if($organizations)
                     <thead>
@@ -22,13 +22,20 @@
                         <tr>
                             <td><img src="{{ $organization->logo }}"></td>
                             <td>{{ $organization->name }}</td>
-                            <td><a href="/organization/{{$organization->id}}" class="btn">Manage</a></td>
+                            @if($organization->ceo_id === Auth::user()->id)
+                            <td><a href="/organization/{{$organization->id}}"><button class="btn">Manage</button></a></td>
+                            @else
+                            <td><a href="/organization/{{$organization->id}}/leave"><button class="btn">Leave</button></a></td>
+                            @endif
                         </tr>
                         @endforeach
+
+                    </tbody>
+                    <tfoot>
                         <tr>
                             <td><a href="{{ url('/createorg')}}">Create new organization</a></td>
                         </tr>
-                    </tbody>
+                    </tfoot>
 
                     @else
                     You aren't in any organization. <a href="{{ url('/createorg')}}">Create new organization</a>
@@ -44,26 +51,32 @@
                 Your Messages
             </div>
             <div class="panel-body">
-                <table class="table table-striped task-table sortable">
+                <table class="table table-striped message-table sortable">
                     <thead>
-                        <th>From</th>
-                        <th> </th>
+                    <th>From</th>
+                    <th> </th>
                     </thead>
                     <tbody>
                         @foreach($messages as $message)
                         <tr>
-                            <td>{{$organizations[$message->org_id]->name}}</td>
+                            <td>{{ $message->org_name }}</td>
                             <td>
-                                <button class="btn"><i class="fa fa-check" aria-hidden="true"></i></button>
-                                <button class="btn"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                <form action="message/accept/{{$message->id}}" method="POST">
+                                    {{ csrf_field() }}
+                                    <button  class="btn"><i class="fa fa-check" aria-hidden="true"></i></button>
+                                </form>
+                                <form action="message/remove/{{$message->id}}" method="POST">
+                                    {{ csrf_field() }}
+                                    <button  class="btn"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                </form>
                             </td>
                         </tr>
                         @endforeach
-                        
+
                     </tbody>
                 </table>
             </div>
-               
+
         </div>
     </div>
     @endif

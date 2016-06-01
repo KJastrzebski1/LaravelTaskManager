@@ -42,10 +42,12 @@ Route::group(['middleware' => ['web']], function () {
     
     Route::any('/organization', 'OrgController@index');
     Route::any('/organization/{id}', 'OrgController@manage');
+    Route::any('/organization/{id}/leave', 'OrgController@leave');
     Route::get('/createorg', 'OrgController@create');
     Route::post('/neworg', 'OrgController@newOrg');
     
-    
+    Route::post('/message/remove/{id}', 'MessageController@remove');
+    Route::post('/message/accept/{id}', 'MessageController@accept');
     Route::post('/organization/{id}/invite', 'MessageController@invite');
     
     Route::get('/users', 'UserController@getUsers');

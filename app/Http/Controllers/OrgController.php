@@ -19,21 +19,18 @@ class OrgController extends Controller {
     }
 
     public function index(Request $request) {
-        $orgs = Organization::get();
-        $norgs =[];
-        foreach ($orgs as $org){
-            $norgs[$org->id] = $org;
-        }
+        $orgs = $this->organizations->forUser($request->user());
+        
         $messages = Message::get();
         $nmessages = [];
-        foreach ($messages as $message){
-            if($message->user_id === $request->user()->id){
-                $nmessages[]=$message;
+        foreach ($messages as $message) {
+            if ($message->user_id === $request->user()->id) {
+                $message['org_name'] = Organization::findOrFail($message['org_id'])->name;
+                $nmessages[] = $message;
             }
         }
-        
         $args = [
-            'organizations' => $norgs,
+            'organizations' => $orgs,
             'messages' => $nmessages,
         ];
         return view('organization.index', $args);
@@ -42,19 +39,22 @@ class OrgController extends Controller {
     public function create() {
         return view('organization.create');
     }
-    
-    public function manage(Request $request, $id){
+
+    public function manage(Request $request, $id) {
         $org = Organization::findOrFail($id);
         $this->authorize('manage', $org);
-        return view('organization.manage', ['org' => $org]);
+        $members = $this->organizations->getMembers($org);
+        return view('organization.manage', [
+            'org' => $org,
+            'members' => $members,
+        ]);
     }
-    
 
     public function newOrg(Request $request) {
         $path = 'uploads/';
         $file = $request->file('organization_logo');
-        $logo = str_replace(' ', '_', $request->organization_name) .rand(1,100). '_logo.' . $file->getClientOriginalExtension();
-        
+        $logo = str_replace(' ', '_', $request->organization_name) . rand(1, 100) . '_logo.' . $file->getClientOriginalExtension();
+
         if (!Organization::where('name', $request->organization_name)->first()) {
             $org = Organization::create([
                         'name' => $request->organization_name,
@@ -66,9 +66,21 @@ class OrgController extends Controller {
                 'width' => 150,
                 'height' => 150,
             ))->save($path . $logo);
-        }else{
+        } else {
             return view('organization.create', ['error' => 'Organization already exists']);
         }
+        return redirect('/organization');
+    }
+
+    public function leave(Request $request, $id) {
+        $org = Organization::findOrFail($id);
+        $user = $request->user();
+        
+        $ids = unserialize($org->user_ids);
+        $index = array_search($user->id, $ids);
+        array_splice($ids, $index);
+        $org->user_ids = serialize($ids);
+        $org->save();
         return redirect('/organization');
     }
 

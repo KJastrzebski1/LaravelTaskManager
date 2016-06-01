@@ -10,12 +10,38 @@
             <div class="panel-body">
                 <img src="/{{ $org->logo }}">
                 @if( isset($message))
-                    {{ $message }}
+                {{ $message }}
                 @endif
             </div>
         </div>
     </div>
     <div class="col-sm-offset-2 col-sm-8">
+        @if ( $members)
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Current members
+            </div>
+            <div class="panel-body">
+                <table class="table table-striped members-table sortable">
+                    <thead>
+                        <th>Name</th>
+                        <th>Role</th>
+                        <th></th>
+                    </thead>
+                    <tbody>
+                        @foreach ($members as $member)
+                        <tr>
+                            <td>{{$member->name}}</td>
+                            <td>{{$member->role}}</td>
+                            <td></td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+                
+            </div>
+        </div>
+        @endif
         <div class="panel panel-default">
             <div class="panel-heading">
                 Invite new members
