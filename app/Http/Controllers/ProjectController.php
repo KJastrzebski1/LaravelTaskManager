@@ -22,9 +22,9 @@ class ProjectController extends Controller
     }
     
     public function store(Request $request){
-        $data = $request['data'];
+        
         $project = new Project();
-        $project->name = $data['name'];
+        $project->name = $request->project_name;
         $project->save();
         return redirect('/tasks');
     }

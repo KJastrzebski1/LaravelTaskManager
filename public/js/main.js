@@ -91,12 +91,7 @@ $(document).ready(function () {
         }
 
     });
-    $(".new-project").click(function () {
-        var project = {
-            'name': $('#project-name').val()
-        };
-        project = addProject(project);
-    });
+    
     $(".new-task").click(function () {
         var task = {
             'name': $('#task-name').val(),

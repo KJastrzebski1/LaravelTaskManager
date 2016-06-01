@@ -8,6 +8,7 @@ class Project extends Model
 {
     protected $fillable = [
         'name',
+        'org_id'
     ];
     
     public function tasks(){

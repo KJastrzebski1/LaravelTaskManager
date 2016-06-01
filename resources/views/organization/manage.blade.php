@@ -66,6 +66,33 @@
                 </form>
             </div>
         </div>
+        
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                New Project
+            </div>
+            <div class="panel-body">
+                
+                <form class="form-horizontal" action="{{ url('/project') }}" method="POST">
+                    {{ csrf_field() }}
+                    <div class="form-group">
+                        <label for="project-name" class="col-sm-3 control-label">Project</label>
+
+                        <div class="col-sm-6">
+                            <input type="text" name="project_name" id="project-name" class="form-control" value="{{ old('task') }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-3 col-sm-6">
+                            <button class="btn btn-default new-project">
+                                <i class="fa fa-btn fa-plus"></i>Save Project
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+   
     </div>
 </div>
 @endsection

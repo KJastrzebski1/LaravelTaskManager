@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddProjectidToTasks extends Migration
+class ProjectsRenameUserIdToOrgId extends Migration
 {
     /**
      * Run the migrations.
@@ -12,8 +12,9 @@ class AddProjectidToTasks extends Migration
      */
     public function up()
     {
-        Schema::table('tasks', function (Blueprint $table) {
-            $table->integer('project_id');
+        Schema::table('projects', function (Blueprint $table) {
+            $table->dropColumn('user_id'); 
+            $table->integer('org_id');
         });
     }
 
@@ -24,8 +25,8 @@ class AddProjectidToTasks extends Migration
      */
     public function down()
     {
-        Schema::table('tasks', function (Blueprint $table) {
-            $table->dropColumn('project_id');
+        Schema::table('projects', function (Blueprint $table) {
+            $table->dropColumn('org_id');
         });
     }
 }
