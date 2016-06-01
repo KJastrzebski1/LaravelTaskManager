@@ -26,6 +26,6 @@ class ProjectController extends Controller
         $project = new Project();
         $project->name = $request->project_name;
         $project->save();
-        return redirect('/tasks');
+        return redirect('/organization');
     }
 }
