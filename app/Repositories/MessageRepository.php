@@ -20,5 +20,9 @@ class MessageRepository {
         
         return !$msg->isEmpty();
     }
-    
+    public function forUser(User $user){
+        $msg = Message::get()->where('user_id', $user->id);
+        
+        return $msg;
+    }
 }

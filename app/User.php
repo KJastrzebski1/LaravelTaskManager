@@ -3,6 +3,8 @@
 namespace App;
 
 use App\Task;
+use App\Organization;
+use App\Message;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable {
@@ -35,5 +37,7 @@ class User extends Authenticatable {
     public function organizations() {
         return $this->belongsTo(Organization::class);
     }
-
+    public function messages(){
+        return $this->hasMany(Message::class);
+    }
 }
