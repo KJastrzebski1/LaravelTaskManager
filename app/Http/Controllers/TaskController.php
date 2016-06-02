@@ -9,7 +9,9 @@ use App\Http\Controllers\Controller;
 use App\Task;
 use App\Project;
 use App\User;
+use App\Organization;
 use App\Repositories\ProjectRepository;
+use App\Repositories\RoleRepository;
 use App\Repositories\TaskRepository;
 
 class TaskController extends Controller {
@@ -20,16 +22,16 @@ class TaskController extends Controller {
      * @var TaskRepository
      */
     protected $tasks;
-
+    protected $roles;
     /**
      * Create a new controller instance.
      *
      * @param  TaskRepository  $tasks
      * @return void
      */
-    public function __construct(TaskRepository $tasks) {
+    public function __construct(TaskRepository $tasks, RoleRepository $roles) {
         $this->middleware('auth');
-
+        $this->roles = $roles;
         $this->tasks = $tasks;
     }
 
@@ -39,10 +41,12 @@ class TaskController extends Controller {
      * @param  Request  $request
      * @return Response
      */
-    public function index(Request $request) {
+    public function index(Request $request, $id) {
         $user = $request->user();
+        $org = Organization::findOrFail($id);
         $projects = Project::get();
-        $permission = ($user->role == 'Manager');
+        $role = $this->roles->getRole($user, $org);
+        $permission = in_array( 'project_manager', unserialize($role->capabilities));
         $p = new Project();
         $p->name = 'Default';
         $p->id = 0;

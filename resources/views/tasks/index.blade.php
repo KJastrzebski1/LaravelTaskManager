@@ -10,7 +10,8 @@
         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
         <strong>Success!</strong> Your data has been synchronized with server.
     </div>
-    @if (Auth::user()->role == 'Manager')
+    @if ($permission)
+    
     <div class="col-sm-offset-2 col-sm-8">
         <div class="panel panel-default">
             <div class="panel-heading">

@@ -10,6 +10,15 @@
                 <div class="panel-body">
                     @if (Auth::guest())
                     <h4>Hi! Please <a href="{{ url('/login') }}">Login</a> or <a href="{{ url('/register') }}">Register</a></h4>
+                    @else
+                    @foreach ($organizations as $org)
+                    <div class="col-sm-6">
+                        <a href="{{ url('tasks/'.$org->id)}}">
+                            {{ $org -> name }}
+                        </a>
+                        
+                    </div>
+                    @endforeach
                     @endif
                 </div>
             </div>
