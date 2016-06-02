@@ -46,6 +46,9 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/createorg', 'OrgController@create');
     Route::post('/neworg', 'OrgController@newOrg');
     
+    Route::any('/organization/{id}/roles', 'RoleController@manage');
+    Route::post('/organization/{id}/roles/save', 'RoleController@store');
+    
     Route::post('/message/remove/{id}', 'MessageController@remove');
     Route::post('/message/accept/{id}', 'MessageController@accept');
     Route::post('/organization/{id}/invite', 'MessageController@invite');

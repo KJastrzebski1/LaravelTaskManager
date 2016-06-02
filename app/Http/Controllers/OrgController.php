@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Repositories\OrgRepository;
+use App\Repositories\RoleRepository;
 use App\Organization;
 use App\User;
 use App\Message;
@@ -12,10 +13,11 @@ use Folklore\Image\Facades\Image;
 
 class OrgController extends Controller {
 
-    protected $organizations;
+    protected $organizations, $roles;
 
-    public function __construct(OrgRepository $orgs) {
+    public function __construct(OrgRepository $orgs, RoleRepository $roles) {
         $this->organizations = $orgs;
+        $this->roles = $roles;
     }
 
     public function index(Request $request) {
@@ -44,6 +46,14 @@ class OrgController extends Controller {
         $org = Organization::findOrFail($id);
         $this->authorize('manage', $org);
         $members = $this->organizations->getMembers($org);
+        foreach ($members as $user){
+            $role = $this->roles->getRole($user, $org);
+            if($role){
+                $user->role = $role->name;
+            }else{
+                $user->role = 'Not assigned';
+            }
+        }
         return view('organization.manage', [
             'org' => $org,
             'members' => $members,

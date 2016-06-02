@@ -5,6 +5,7 @@ namespace App;
 use App\Task;
 use App\Organization;
 use App\Message;
+use App\Role;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable {
@@ -33,7 +34,9 @@ class User extends Authenticatable {
     public function tasks() {
         return $this->hasMany(Task::class);
     }
-
+    public function roles(){
+        return $this->hasMany(Role::class);
+    }
     public function organizations() {
         return $this->belongsTo(Organization::class);
     }

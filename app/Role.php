@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Organization;
+use App\User;
 
 class Role extends Model
 {
@@ -15,5 +16,8 @@ class Role extends Model
     
     public function organizations(){
         return $this->belongsTo(Organization::class);
+    }
+    public function users(){
+        return $this->belongsTo(User::class);
     }
 }

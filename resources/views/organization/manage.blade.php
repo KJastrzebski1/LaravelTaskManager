@@ -19,7 +19,7 @@
         @if ( $members)
         <div class="panel panel-default">
             <div class="panel-heading">
-                Current members
+                Current members <a href="{{ url('organization/'.$org->id.'/roles')}}">Manage Roles</a>
             </div>
             <div class="panel-body">
                 <table class="table table-striped members-table sortable">
