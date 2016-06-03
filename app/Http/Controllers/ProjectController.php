@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Task;
+use App\Organization;
 use App\Project;
 use App\Repositories\TaskRepository;
 use App\Repositories\ProjectRepository;
@@ -21,11 +21,12 @@ class ProjectController extends Controller
         $this->projects = $projects;
     }
     
-    public function store(Request $request){
+    public function store(Request $request, $id){
         
         $project = new Project();
         $project->name = $request->project_name;
+        $project->org_id = Organization::findOrFail($id)->id;
         $project->save();
-        return redirect('/organization');
+        return redirect('/organization/'.$id);
     }
 }

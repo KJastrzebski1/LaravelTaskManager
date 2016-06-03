@@ -10,6 +10,7 @@ use App\Task;
 use App\Project;
 use App\User;
 use App\Organization;
+use App\Role;
 use App\Repositories\ProjectRepository;
 use App\Repositories\RoleRepository;
 use App\Repositories\TaskRepository;
@@ -44,7 +45,7 @@ class TaskController extends Controller {
     public function index(Request $request, $id) {
         $user = $request->user();
         $org = Organization::findOrFail($id);
-        $projects = Project::get();
+        $projects = Project::where('org_id', $id)->get();
         $role = $this->roles->getRole($user, $org);
         $permission = in_array( 'project_manager', unserialize($role->capabilities));
         $p = new Project();
@@ -73,6 +74,8 @@ class TaskController extends Controller {
             'tasks' => $tasks,
             'projects' => $projects,
             'permission' => $permission,
+            'organization' => $org
+            
         ];
         if($permission){
             $args['users'] = $users;
@@ -87,7 +90,8 @@ class TaskController extends Controller {
      * @return Response
      */
     public function store(Request $request) {
-        $this->authorize('isManager', $request->user());
+        //$this->authorize('isManager', $request->user());
+        
         $data = $request["data"];
         $task = Task::create([
             "name" => $data["name"],
@@ -121,16 +125,16 @@ class TaskController extends Controller {
         $task->priority = $data['priority'];
         $task->status = $data['status'];
         $user = $request->user();
-        if($user->role == 'Manager'){
+        //if($user->role == 'Manager'){
             $task->user_id = $data['user_id'];
-        }
+        //}
         
         $task->save();
         return response()->json($task);
     }
 
     public function destroyAjax(Request $request) {
-        $this->authorize('isManager', $request->user());
+        //$this->authorize('isManager', $request->user());
         $data = $request['data'];
         $task = Task::findOrFail($data);
         

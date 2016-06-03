@@ -1,8 +1,12 @@
 
 function addTask(task) {
-    var tasks = JSON.parse(localStorage.taskRepo);
-    var tasksToAdd = [];
+    if(localStorage.taskRepo){
+        var tasks = JSON.parse(localStorage.taskRepo);
+    }else{
+        var tasks = [];
+    }
     
+    var tasksToAdd = [];
     return new Promise(function (resolve, reject) {
         if (navigator.onLine) {
             $.ajax({
@@ -11,6 +15,7 @@ function addTask(task) {
                 'data': {'data': task},
                 'async': true,
                 'success': function (response) {
+                    
                     task = response['task'];
                     tasks.push(task);
                     localStorage.taskRepo = JSON.stringify(tasks);
@@ -35,10 +40,10 @@ function addTask(task) {
     //return task;
 
 }
-function getUsers() {
+function getUsers(org_id) {
     var users = [];
     $.ajax({
-        'url': '/users',
+        'url': '/users/'+org_id,
         'method': 'get',
         'async': false,
         'error': function (response) {

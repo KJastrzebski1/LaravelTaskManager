@@ -73,13 +73,13 @@
             </div>
             <div class="panel-body">
                 
-                <form class="form-horizontal" action="{{ url('/project') }}" method="POST">
+                <form class="form-horizontal" action="{{ url('/project/'.$org->id) }}" method="POST">
                     {{ csrf_field() }}
                     <div class="form-group">
                         <label for="project-name" class="col-sm-3 control-label">Project</label>
 
                         <div class="col-sm-6">
-                            <input type="text" name="project_name" id="project-name" class="form-control" value="{{ old('task') }}">
+                            <input type="text" name="project_name" id="project-name" class="form-control" value="">
                         </div>
                     </div>
                     <div class="form-group">

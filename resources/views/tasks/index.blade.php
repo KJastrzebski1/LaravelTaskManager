@@ -2,6 +2,14 @@
 
 @section('content')
 <div class="container">
+    <div class="col-sm-offset-2 col-sm-8">
+        <div class="panel panel-default">
+
+            <div class="panel-heading">
+                Organization: {{ $organization->name }}
+            </div>
+        </div>
+    </div>
     <div class="alert alert-warning" >
         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
         <strong>Warning!</strong> You are in offline mode. Your data will be stored locally and synchronized after getting online.
@@ -11,7 +19,7 @@
         <strong>Success!</strong> Your data has been synchronized with server.
     </div>
     @if ($permission)
-    
+
     <div class="col-sm-offset-2 col-sm-8">
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -100,7 +108,7 @@
         <div class="panel panel-default" id="project-{{$project->id}}">
             <div class="panel-heading">
                 {{ $project->name }}
-                
+
             </div>
 
             <div class="panel-body">
@@ -117,27 +125,27 @@
                     </thead>
 
                     <tbody>
-                        @foreach ($tasks[$project->id] as $task)
-                        <script>
-                            
-                            if(localStorage.taskRepo){
-                               task = JSON.parse(localStorage.taskRepo);
-                            }
-                            var tmp = {
-                                "id": {{ $task->id }},
+                    @foreach ($tasks[$project->id] as $task)
+                    <script>
+
+                        if (localStorage.taskRepo){
+                        task = JSON.parse(localStorage.taskRepo);
+                        }
+                        var tmp = {
+                        "id": {{ $task->id }},
                                 "name": "{{ $task->name }}",
                                 "deadline": "{{ $task->deadline }}",
                                 "status": {{ $task->status }},
                                 "priority": "{{ $task->priority}}"
-                            }
-                            if(permission){
-                                tmp["user_id"] = {{ $task->user_id}};
-                            }
-                            task.push(tmp);
-                            localStorage.taskRepo = JSON.stringify(task);
-                        </script>
+                        }
+                        if (permission){
+                        tmp["user_id"] = {{ $task -> user_id}};
+                        }
+                        task.push(tmp);
+                        localStorage.taskRepo = JSON.stringify(task);
+                    </script>
                         @include('tasks.task', ['task' => $task])
-                        @endforeach
+                    @endforeach
                     </tbody>
                 </table>
             </div>

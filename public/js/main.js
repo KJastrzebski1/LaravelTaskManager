@@ -46,7 +46,9 @@ $(document).ready(function () {
                 '</select>');
         $("tr#task-" + id + " .tpriority select").val(task["priority"]);
         if (permission) {
-            var users = getUsers();
+            var org_id = parseInt(location.pathname.replace('/tasks/',''));
+            console.log(org_id);
+            var users = getUsers(org_id);
             var user = '<select class="form-control">';
             for (var i = 0; i < users.length; i++) {
                 user += '<option value=' + users[i].id + '>' + users[i].name + '</option>';
@@ -101,6 +103,7 @@ $(document).ready(function () {
             'project_id': parseInt($('#task-project').val())
         };
         //task = addTask(task);
+        console.log('elo');
         addTask(task).then(function (response) {
             if (typeof response === 'object') 
             {
@@ -125,7 +128,7 @@ $(document).ready(function () {
                         '</tr>'
                         );
             } else{
-                console.log(typeof task);
+                console.log(typeof response);
             }
         });
     });

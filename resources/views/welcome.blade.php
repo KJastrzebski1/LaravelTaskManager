@@ -14,9 +14,10 @@
                     @foreach ($organizations as $org)
                     <div class="col-sm-6">
                         <a href="{{ url('tasks/'.$org->id)}}">
+                            <img src="/{{$org->logo }}">
                             {{ $org -> name }}
                         </a>
-                        
+
                     </div>
                     @endforeach
                     @endif

@@ -7,6 +7,8 @@ use App\Repositories\OrgRepository;
 use App\Repositories\RoleRepository;
 use App\Organization;
 use App\User;
+use App\Role;
+use DB;
 use App\Message;
 use App\Http\Requests;
 use Folklore\Image\Facades\Image;
@@ -22,7 +24,7 @@ class OrgController extends Controller {
 
     public function index(Request $request) {
         $orgs = $this->organizations->forUser($request->user());
-        
+
         $messages = Message::get();
         $nmessages = [];
         foreach ($messages as $message) {
@@ -46,11 +48,11 @@ class OrgController extends Controller {
         $org = Organization::findOrFail($id);
         $this->authorize('manage', $org);
         $members = $this->organizations->getMembers($org);
-        foreach ($members as $user){
+        foreach ($members as $user) {
             $role = $this->roles->getRole($user, $org);
-            if($role){
+            if ($role) {
                 $user->role = $role->name;
-            }else{
+            } else {
                 $user->role = 'Not assigned';
             }
         }
@@ -76,6 +78,21 @@ class OrgController extends Controller {
                 'width' => 150,
                 'height' => 150,
             ))->save($path . $logo);
+            $capabilities = [
+                'task_manager',
+                'project_manager',
+                'organization_manager',
+            ];
+            $role = Role::create([
+                        'name' => 'CEO',
+                        'org_id' => $org->id,
+                        'capabilities' => serialize($capabilities),
+            ]);
+            DB::table('user_roles')->insert([
+                'user_id' => $request->user()->id,
+                'org_id' => $org->id,
+                'role_id' => $role->id,
+            ]);
         } else {
             return view('organization.create', ['error' => 'Organization already exists']);
         }
@@ -85,14 +102,14 @@ class OrgController extends Controller {
     public function leave(Request $request, $id) {
         $org = Organization::findOrFail($id);
         $user = $request->user();
-        
+
         $ids = unserialize($org->user_ids);
         $index = array_search($user->id, $ids);
         array_splice($ids, $index);
+        DB::table('user_roles')->where('user_id', $user->id)->where('org_id', $org->id)->delete();
         $org->user_ids = serialize($ids);
         $org->save();
         return redirect('/organization');
     }
-    
 
 }

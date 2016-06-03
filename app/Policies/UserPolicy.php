@@ -4,6 +4,8 @@ namespace App\Policies;
 
 use App\User;
 use App\Organization;
+use App\Role;
+use DB;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 
@@ -21,16 +23,18 @@ class UserPolicy
         //
     }
     
-    public function isManager(User $user)
+    public function isManager($array)
     {
-        return $user->role === 'Manager';
-    }
-    public function isCapable(User $user, Organization $org, $cap){
+        
+        $user = $array[1];
+        $org = $array[0];
         $query = DB::table('user_roles')
                 ->where('user_id', $user->id)
                 ->where('org_id', $org->id)
                 ->first();
-        return in_array($cap, $query);
+        $role = Role::where('id', $query->role_id)->first();
+        return in_array('project_manager', $role);
     }
+    
     
 }

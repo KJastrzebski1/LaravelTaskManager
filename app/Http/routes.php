@@ -36,7 +36,7 @@ Route::group(['middleware' => ['web']], function () {
         return view('test.test');
     });
     
-    Route::post('/project', 'ProjectController@store');
+    Route::post('/project/{id}', 'ProjectController@store');
     
     Route::any('/organization', 'OrgController@index');
     Route::any('/organization/{id}', 'OrgController@manage');
@@ -51,7 +51,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('/message/accept/{id}', 'MessageController@accept');
     Route::post('/organization/{id}/invite', 'MessageController@invite');
     
-    Route::get('/users', 'UserController@getUsers');
+    Route::get('/users/{id}', 'UserController@getUsers');
     Route::auth();
 
 });

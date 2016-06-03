@@ -14,13 +14,29 @@ use App\Role;
 use DB;
 
 class RoleRepository {
-    
-    public function getRole(User $user, Organization $org){
+
+    public function getRole(User $user, Organization $org) {
         $query = DB::table('user_roles')
                 ->where('user_id', $user->id)
                 ->where('org_id', $org->id)
                 ->first();
-        $role = Role::findOrFail($query->role_id);
+        if ($query) {
+            $role = Role::findOrFail($query->role_id);
+        } else {
+            $capabilities = [
+                null,
+                null,
+                null,
+            ];
+
+            $role = Role::create([
+                        'name' => 'No role',
+                        'org_id' => $org->id,
+                        'capabilities' => serialize($capabilities),
+            ]);
+        }
+
         return $role;
     }
+
 }

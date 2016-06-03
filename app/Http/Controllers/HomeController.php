@@ -28,7 +28,6 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-        $user = $request->user();
         $orgs = $this->organizations->forUser($request->user());
         
         return view('welcome', ['organizations' => $orgs]);
