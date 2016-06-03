@@ -28,15 +28,16 @@ class RoleRepository {
                 null,
                 null,
             ];
-
-            $role = Role::create([
-                        'name' => 'No role',
-                        'org_id' => $org->id,
-                        'capabilities' => serialize($capabilities),
-            ]);
+            $role = new Role();
+            $role->name = 'No role';
+            $role->org_id = $org->id;
+            $role->capabilities = serialize($capabilities);
         }
 
         return $role;
     }
 
+    public function getRoles(Organization $org){
+        return Role::where('org_id', $org->id)-get();
+    }
 }

@@ -30,10 +30,10 @@
                     </thead>
                     <tbody>
                         @foreach ($members as $member)
-                        <tr>
-                            <td>{{$member->name}}</td>
-                            <td>{{$member->role}}</td>
-                            <td></td>
+                        <tr id="member-{{$member->id}}">
+                            <td class="member-name">{{$member->name}}</td>
+                            <td class="member-role">{{$member->role}}</td>
+                            <td><button id='set-role-{{$member->id}}' class="btn set-role">Edit</button></td>
                         </tr>
                         @endforeach
                     </tbody>

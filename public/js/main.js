@@ -47,7 +47,6 @@ $(document).ready(function () {
         $("tr#task-" + id + " .tpriority select").val(task["priority"]);
         if (permission) {
             var org_id = parseInt(location.pathname.replace('/tasks/',''));
-            console.log(org_id);
             var users = getUsers(org_id);
             var user = '<select class="form-control">';
             for (var i = 0; i < users.length; i++) {
@@ -182,5 +181,12 @@ $(document).ready(function () {
 
         window.addEventListener('online', updateOnlineStatus);
         window.addEventListener('offline', updateOnlineStatus);
+    });
+    
+    $('.members-table').on('click', '.set-role', function(){
+        var id = parseInt(this.id.replace('set-role-', ''));
+        console.log(id);
+        var org_id = parseInt(location.pathname.replace('/organization/',''));
+        var roles = getRoles(org_id);
     });
 });

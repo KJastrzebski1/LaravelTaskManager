@@ -4,23 +4,29 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Role;
+use DB;
 use App\Organization;
 use App\Http\Requests;
 
 class RoleController extends Controller
 {
-    public function addCapability(Role $role, $str){
-        $caps = unserialize($role->capabilities);
-        if(!in_array($str, $caps)){
-            $caps[] = $str;
-        }
-        $role->capabilities = serialize($caps);
-        $role->save();
-    }
     
-    public function addRole(Role $role, Organization $org){
-        $role->org_id = $org->id;
-        $role->save();
+    public function assign(Request $request){
+        $data = $request['data'];
+        if($data['new']){
+            DB::table('user_roles')->insert([
+                'user_id' => $request->user()->id,
+                'org_id' => $data['org_id'],
+                'role_id' =>$data['role_id']
+            ]);
+        }else{
+            DB::table('user_roles')
+                    ->where('user_id', $request->user()->id)
+                    ->where('org_id', $data['org_id'])
+                    ->update(['role_id', $data['role_id']]);
+            
+        }
+        
     }
     
     public function manage(Request $request, $id){

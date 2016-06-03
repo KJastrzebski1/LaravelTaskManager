@@ -111,5 +111,10 @@ class OrgController extends Controller {
         $org->save();
         return redirect('/organization');
     }
-
+    public function getRoles(Request $request){
+        $data = $request['data'];
+        $org = Organization::findOrFail($data);
+        $roles = $this->roles->getRoles($org);
+        return response()->json($roles);
+    }
 }
