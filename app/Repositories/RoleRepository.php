@@ -38,6 +38,6 @@ class RoleRepository {
     }
 
     public function getRoles(Organization $org){
-        return Role::where('org_id', $org->id)-get();
+        return Role::where('org_id', $org->id)->get();
     }
 }

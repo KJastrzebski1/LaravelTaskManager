@@ -46,7 +46,7 @@ $(document).ready(function () {
                 '</select>');
         $("tr#task-" + id + " .tpriority select").val(task["priority"]);
         if (permission) {
-            var org_id = parseInt(location.pathname.replace('/tasks/',''));
+            var org_id = parseInt(location.pathname.replace('/tasks/', ''));
             var users = getUsers(org_id);
             var user = '<select class="form-control">';
             for (var i = 0; i < users.length; i++) {
@@ -92,7 +92,7 @@ $(document).ready(function () {
         }
 
     });
-    
+
     $(".new-task").click(function () {
         var task = {
             'name': $('#task-name').val(),
@@ -104,7 +104,7 @@ $(document).ready(function () {
         //task = addTask(task);
         console.log('elo');
         addTask(task).then(function (response) {
-            if (typeof response === 'object') 
+            if (typeof response === 'object')
             {
                 var users = getUsers();
                 console.log(response);
@@ -126,7 +126,7 @@ $(document).ready(function () {
                         '</td>' +
                         '</tr>'
                         );
-            } else{
+            } else {
                 console.log(typeof response);
             }
         });
@@ -163,7 +163,7 @@ $(document).ready(function () {
                 if (localStorage.tasksToDelete) {
                     var tasksToDelete = JSON.parse(localStorage.tasksToDelete);
                     for (var i = 0; i < tasksToDelete.length; i++) {
-                        
+
                         deleteTask(tasksToDelete[i]);
                     }
                     localStorage.tasksToDelete = "";
@@ -182,11 +182,39 @@ $(document).ready(function () {
         window.addEventListener('online', updateOnlineStatus);
         window.addEventListener('offline', updateOnlineStatus);
     });
-    
-    $('.members-table').on('click', '.set-role', function(){
+
+    $('.members-table').on('click', '.set-role', function () {
+        var $btn = $(this).html("Save");
+        $btn.toggleClass("set-role");
+        $btn.toggleClass("save-role");
+        
         var id = parseInt(this.id.replace('set-role-', ''));
-        console.log(id);
-        var org_id = parseInt(location.pathname.replace('/organization/',''));
-        var roles = getRoles(org_id);
+        var org_id = parseInt(location.pathname.replace('/organization/', ''));
+        var roles;
+        getRoles(org_id).then(function (response) {
+            roles = response;
+
+            console.log(roles);
+            var select = "<select>";
+            for(var i = 0; i<roles.length; i++){
+                select += "<option value="+roles[i].id+">"+roles[i].name+"</option>";
+            }
+            select += "</select>";
+            $("#member-"+id+" .member-role").html(select);
+            
+            
+        });
+    });
+    $('.members-table').on('click', '.save-role', function(){
+        var $btn = $(this).html("Edit");
+        $btn.toggleClass("set-role");
+        $btn.toggleClass("save-role");
+        var id = parseInt(this.id.replace('set-role-', ''));
+        var role_id = $('#member-'+id+' .member-role option:selected').val();
+        var role_name = $('#member-'+id+' .member-role option:selected').html();
+        var org_id = parseInt(location.pathname.replace('/organization/', ''));
+        setRole(id, org_id, role_id).then(function (response){
+            $("#member-"+id+" .member-role").html(role_name);
+        });
     });
 });

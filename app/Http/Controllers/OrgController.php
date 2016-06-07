@@ -111,10 +111,33 @@ class OrgController extends Controller {
         $org->save();
         return redirect('/organization');
     }
-    public function getRoles(Request $request){
-        $data = $request['data'];
-        $org = Organization::findOrFail($data);
+
+    public function getRoles(Request $request, $id) {
+        $org = Organization::findOrFail($id);
         $roles = $this->roles->getRoles($org);
         return response()->json($roles);
     }
+
+    public function setRole(Request $request) {
+        $data = $request["data"];
+
+        $obj = DB::table('user_roles')
+                        ->where('user_id', $data['user_id'])
+                        ->where('org_id', $data['org_id'])->get();
+
+        if (count($obj) > 0) {
+            DB::table('user_roles')
+                    ->where('user_id', $data['user_id'])
+                    ->where('org_id', $data['org_id'])
+                    ->update(['role_id' => $data['role_id']]);
+        } else {
+            DB::table('user_roles')->insert([
+                'user_id' => $data['user_id'],
+                'org_id' => $data['org_id'],
+                'role_id' => $data['role_id']
+            ]);
+        }
+        
+    }
+
 }

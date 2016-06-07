@@ -1,11 +1,11 @@
 
 function addTask(task) {
-    if(localStorage.taskRepo){
+    if (localStorage.taskRepo) {
         var tasks = JSON.parse(localStorage.taskRepo);
-    }else{
+    } else {
         var tasks = [];
     }
-    
+
     var tasksToAdd = [];
     return new Promise(function (resolve, reject) {
         if (navigator.onLine) {
@@ -15,7 +15,7 @@ function addTask(task) {
                 'data': {'data': task},
                 'async': true,
                 'success': function (response) {
-                    
+
                     task = response['task'];
                     tasks.push(task);
                     localStorage.taskRepo = JSON.stringify(tasks);
@@ -43,7 +43,7 @@ function addTask(task) {
 function getUsers(org_id) {
     var users = [];
     $.ajax({
-        'url': '/users/'+org_id,
+        'url': '/users/' + org_id,
         'method': 'get',
         'async': false,
         'error': function (response) {
@@ -139,7 +139,6 @@ function deleteTask(id) {
 }
 
 function addProject(project) {
-    console.log(project);
     if (navigator.onLine) {
         $.ajax({
             'url': '/project',
@@ -150,4 +149,35 @@ function addProject(project) {
             }
         });
     }
+}
+
+function getRoles(org_id) {
+    return new Promise(function (resolve, reject) {
+        $.ajax({
+            'url': '/organization/' + org_id + '/getroles',
+            'method': 'post',
+            'success': function (response) {
+                resolve(response);
+            }
+        });
+
+    });
+}
+
+function setRole(user_id, org_id, role_id) {
+    var data = {
+        'user_id': user_id,
+        'org_id': org_id,
+        'role_id': role_id
+    };
+    return new Promise(function (resolve, reject) {
+        $.ajax({
+            'url': '/organization/' + org_id + '/setrole',
+            'method': 'post',
+            'data': {'data': data},
+            'success': function (response) {
+                resolve(response);
+            }
+        });
+    });
 }
