@@ -23,9 +23,9 @@
                             <td><img src="{{ $organization->logo }}"></td>
                             <td>{{ $organization->name }}</td>
                             @if($organization->ceo_id === Auth::user()->id)
-                            <td><a href="/organization/{{$organization->id}}"><button class="btn">Manage</button></a></td>
+                            <td><a href="organization/{{$organization->id}}"><button class="btn">Manage</button></a></td>
                             @else
-                            <td><a href="/organization/{{$organization->id}}/leave"><button class="btn">Leave</button></a></td>
+                            <td><a href="organization/{{$organization->id}}/leave"><button class="btn">Leave</button></a></td>
                             @endif
                         </tr>
                         @endforeach

@@ -8,7 +8,7 @@
                 You organization: {{ $org->name }}
             </div>
             <div class="panel-body">
-                <img src="/{{ $org->logo }}">
+                <img src="{{ url($org->logo) }}">
                 @if( isset($message))
                 {{ $message }}
                 @endif
@@ -47,7 +47,7 @@
                 Invite new members
             </div>
             <div class="panel-body">
-                <form action="/organization/{{$org->id}}/invite" method="POST">
+                <form action="organization/{{$org->id}}/invite" method="POST">
                     {{ csrf_field() }}
                     <div class="form-group">
                         <label for="member-email" class="col-sm-3 control-label">E-mail</label>
