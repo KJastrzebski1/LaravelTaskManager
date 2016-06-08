@@ -48,7 +48,7 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
-                        <li></li>
+                        <li><a href="{{url('/about')}}">About Project</a></li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->

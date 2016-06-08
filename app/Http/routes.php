@@ -55,6 +55,10 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('/organization/{id}/invite', 'MessageController@invite');
     
     Route::get('/users/{id}', 'UserController@getUsers');
+    
+    Route::any('/about', function(){
+        return view('static.about');
+    });
     Route::auth();
 
 });

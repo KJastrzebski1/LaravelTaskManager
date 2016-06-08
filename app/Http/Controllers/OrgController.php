@@ -19,6 +19,7 @@ class OrgController extends Controller {
     protected $organizations, $roles;
 
     public function __construct(OrgRepository $orgs, RoleRepository $roles) {
+        $this->middleware('auth');
         $this->organizations = $orgs;
         $this->roles = $roles;
     }

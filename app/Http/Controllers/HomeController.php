@@ -17,7 +17,7 @@ class HomeController extends Controller
      */
     public function __construct(OrgRepository $orgs)
     {
-        $this->middleware('auth');
+        
         $this->organizations = $orgs;
     }
 
@@ -28,8 +28,11 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-        $orgs = $this->organizations->forUser($request->user());
         
-        return view('welcome', ['organizations' => $orgs]);
+        if(!$request->user()){
+            return view('static.home');
+        }
+        $orgs = $this->organizations->forUser($request->user());
+        return view('static.welcome', ['organizations' => $orgs]);
     }
 }

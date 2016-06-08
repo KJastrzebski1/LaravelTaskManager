@@ -31,16 +31,13 @@
                         @endforeach
 
                     </tbody>
-                    <tfoot>
-                        <tr>
-                            <td><a href="{{ url('/createorg')}}">Create new organization</a></td>
-                        </tr>
-                    </tfoot>
-
                     @else
-                    You aren't in any organization. <a href="{{ url('/createorg')}}">Create new organization</a>
+                    You aren't in any organization.
                     @endif
                 </table>
+            </div>
+            <div class="panel-footer">
+                <a href="{{ url('/createorg')}}">Create new organization</a>
             </div>
         </div>
     </div>

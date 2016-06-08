@@ -14,14 +14,17 @@
                     @foreach ($organizations as $org)
                     <div class="col-sm-6">
                         <a href="{{ url('tasks/'.$org->id)}}">
-                            <div class="col-sm-6">
-                                <img src="{{$org->logo }}">
+                            <div class="panel panel-default panel-body">
+                                <div class="col-sm-6">
+                                    <img src="{{$org->logo }}">
+                                </div>
+                                <div class="col-sm-6">
+                                    {{ $org -> name }}
+                                </div>
                             </div>
-                            <div class="col-sm-6">
-                                {{ $org -> name }}
-                            </div>
-                            
-                            
+
+
+
                         </a>
 
                     </div>
