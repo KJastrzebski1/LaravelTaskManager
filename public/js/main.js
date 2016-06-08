@@ -189,7 +189,8 @@ $(document).ready(function () {
         $btn.toggleClass("save-role");
         
         var id = parseInt(this.id.replace('set-role-', ''));
-        var org_id = parseInt(location.pathname.replace('/organization/', ''));
+        var loc = location.pathname.split("/");
+        var org_id = parseInt(loc[loc.length-1]);
         var roles;
         getRoles(org_id).then(function (response) {
             roles = response;

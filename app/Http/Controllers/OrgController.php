@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Repositories\OrgRepository;
 use App\Repositories\RoleRepository;
+use App\Repositories\ProjectRepository;
 use App\Organization;
 use App\User;
 use App\Role;
@@ -28,7 +29,7 @@ class OrgController extends Controller {
         $messages = Message::get();
         $nmessages = [];
         foreach ($messages as $message) {
-            if ($message->user_id === $request->user()->id) {
+            if ($message->user_id == $request->user()->id) {
                 $message['org_name'] = Organization::findOrFail($message['org_id'])->name;
                 $nmessages[] = $message;
             }
@@ -137,7 +138,28 @@ class OrgController extends Controller {
                 'role_id' => $data['role_id']
             ]);
         }
-        
+    }
+
+    public function delete(Request $request, $id) {
+        $org = Organization::findOrFail($id);
+        $this->authorize('manage', $org);
+        if ($request->user()->id == $org->ceo_id) {
+            $user_ids = unserialize($org->user_ids);
+
+            foreach ($user_ids as $user_id) {
+                DB::table('user_roles')->where('user_id', $user_id)->where('org_id', $org->id)->delete();
+            }
+            RoleRepository::deleteRoles($org);
+            ProjectRepository::deleteProjects($org);
+            $org->forceDelete();
+            return redirect('/organization');
+        }
+        $members = $this->organizations->getMembers($org);
+        return view('organization.manage', [
+            'org' => $org,
+            'members' => $members,
+            'message' => 'You are not CEO.'
+        ]);
     }
 
 }

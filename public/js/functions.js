@@ -1,4 +1,4 @@
-
+var loc = '';
 function addTask(task) {
     if (localStorage.taskRepo) {
         var tasks = JSON.parse(localStorage.taskRepo);
@@ -10,7 +10,7 @@ function addTask(task) {
     return new Promise(function (resolve, reject) {
         if (navigator.onLine) {
             $.ajax({
-                'url': '/task',
+                'url': loc+'/task',
                 'method': 'post',
                 'data': {'data': task},
                 'async': true,
@@ -43,7 +43,7 @@ function addTask(task) {
 function getUsers(org_id) {
     var users = [];
     $.ajax({
-        'url': '/users/' + org_id,
+        'url': loc+'/users/' + org_id,
         'method': 'get',
         'async': false,
         'error': function (response) {
@@ -64,7 +64,7 @@ function editTask(task) {
     }
     if (navigator.onLine) {
         $.ajax({
-            'url': '/edit',
+            'url': loc+'/edit',
             'method': 'post',
             'data': {'data': task},
             'async': false,
@@ -109,7 +109,7 @@ function deleteTask(id) {
         if (tasks[i]["id"] == id) {
             if (navigator.onLine) {
                 $.ajax({
-                    'url': '/delete',
+                    'url': loc+'/delete',
                     'method': 'post',
                     'data': {'data': tasks[i]['id']},
                     'async': false,
@@ -141,7 +141,7 @@ function deleteTask(id) {
 function addProject(project) {
     if (navigator.onLine) {
         $.ajax({
-            'url': '/project',
+            'url': loc+'/project',
             'method': 'post',
             'data': {'data': project},
             'async': false,
@@ -154,7 +154,7 @@ function addProject(project) {
 function getRoles(org_id) {
     return new Promise(function (resolve, reject) {
         $.ajax({
-            'url': '/organization/' + org_id + '/getroles',
+            'url': loc+'/organization/' + org_id + '/getroles',
             'method': 'post',
             'success': function (response) {
                 resolve(response);
@@ -172,7 +172,7 @@ function setRole(user_id, org_id, role_id) {
     };
     return new Promise(function (resolve, reject) {
         $.ajax({
-            'url': '/organization/' + org_id + '/setrole',
+            'url': loc+'/organization/' + org_id + '/setrole',
             'method': 'post',
             'data': {'data': data},
             'success': function (response) {

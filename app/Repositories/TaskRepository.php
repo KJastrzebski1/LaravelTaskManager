@@ -26,5 +26,9 @@ class TaskRepository {
                         ->orderBy('created_at', 'asc')
                         ->get();
     }
+    
+    public static function deleteTasks(Project $project) {
+        Task::where('project_id', $project->id)->forceDelete();
+    }
 
 }

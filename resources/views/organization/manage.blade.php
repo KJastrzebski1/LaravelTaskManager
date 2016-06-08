@@ -3,15 +3,30 @@
 @section ('content')
 <div class="container">
     <div class="col-sm-offset-2 col-sm-8">
-        <div class="panel panel-default">
+        @if( isset($message))
+        <div class="alert alert-info" style="display: block;">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            {{ $message }}
+        </div>
+        @endif
+        <div class="panel panel-primary">
             <div class="panel-heading">
-                You organization: {{ $org->name }}
+                Organization: {{ $org->name }}
             </div>
             <div class="panel-body">
-                <img src="{{ url($org->logo) }}">
-                @if( isset($message))
-                {{ $message }}
-                @endif
+                <div class="col-sm-3">
+                    <img src="{{ url($org->logo) }}">
+                </div>
+                <div class="col-sm-6">
+                    
+                </div>
+                <div class="col-sm-3">
+                    <form action="{{ url('/organization/'.$org->id.'/delete')}}" method="POST">
+                        {{ csrf_field() }}
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
+
             </div>
         </div>
     </div>
@@ -19,14 +34,14 @@
         @if ( $members)
         <div class="panel panel-default">
             <div class="panel-heading">
-                Current members <a href="{{ url('organization/'.$org->id.'/roles')}}">Manage Roles</a>
+                Current members <a href="{{ url('/organization/'.$org->id.'/roles')}}">Manage Roles</a>
             </div>
             <div class="panel-body">
                 <table class="table table-striped members-table sortable">
                     <thead>
-                        <th>Name</th>
-                        <th>Role</th>
-                        <th></th>
+                    <th>Name</th>
+                    <th>Role</th>
+                    <th></th>
                     </thead>
                     <tbody>
                         @foreach ($members as $member)
@@ -38,7 +53,7 @@
                         @endforeach
                     </tbody>
                 </table>
-                
+
             </div>
         </div>
         @endif
@@ -47,7 +62,7 @@
                 Invite new members
             </div>
             <div class="panel-body">
-                <form action="organization/{{$org->id}}/invite" method="POST">
+                <form action="{{ url('/organization/'.$org->id.'/invite')}}" method="POST" class="form-horizontal">
                     {{ csrf_field() }}
                     <div class="form-group">
                         <label for="member-email" class="col-sm-3 control-label">E-mail</label>
@@ -66,13 +81,13 @@
                 </form>
             </div>
         </div>
-        
+
         <div class="panel panel-default">
             <div class="panel-heading">
                 New Project
             </div>
             <div class="panel-body">
-                
+
                 <form class="form-horizontal" action="{{ url('/project/'.$org->id) }}" method="POST">
                     {{ csrf_field() }}
                     <div class="form-group">
@@ -92,7 +107,7 @@
                 </form>
             </div>
         </div>
-   
+
     </div>
 </div>
 @endsection

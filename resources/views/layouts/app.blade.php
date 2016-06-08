@@ -41,13 +41,14 @@
 
                     <!-- Branding Image -->
                     <a class="navbar-brand" href="{{ url('/') }}">
-                        Task List
+                        Dashboard
                     </a>
                 </div>
 
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
+                        <li></li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -65,7 +66,7 @@
                             <ul class="dropdown-menu" role="menu">
                                 <li><a href="{{ url('/organization')}}">Your organizations &nbsp;
                                         @if (count(Auth::user()->messages)>0)
-                                        <i class="fa fa-btn fa-envelope"></i>
+                                        <span class="badge"><i class="fa fa-envelope"></i></span>
                                         @endif
                                     </a></li>
                                 <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>

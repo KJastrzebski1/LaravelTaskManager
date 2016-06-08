@@ -40,4 +40,8 @@ class RoleRepository {
     public function getRoles(Organization $org){
         return Role::where('org_id', $org->id)->get();
     }
+    
+    public static function deleteRoles(Organization $org){
+        return Role::where('org_id', $org->id)->forceDelete();
+    }
 }
