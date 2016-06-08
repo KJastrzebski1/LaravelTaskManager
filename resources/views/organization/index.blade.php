@@ -4,7 +4,7 @@
 
 <div class="container">
     <div class="col-sm-offset-2 col-sm-8">
-        <div class="panel panel-default">
+        <div class="panel panel-primary">
             <div class="panel-heading">
                 Your Organizations
             </div>
@@ -23,9 +23,9 @@
                             <td><img src="{{ $organization->logo }}"></td>
                             <td>{{ $organization->name }}</td>
                             @if($organization->ceo_id === Auth::user()->id)
-                            <td><a href="organization/{{$organization->id}}"><button class="btn">Manage</button></a></td>
+                            <td><a href="organization/{{$organization->id}}"><button class="btn btn-info">Manage</button></a></td>
                             @else
-                            <td><a href="organization/{{$organization->id}}/leave"><button class="btn">Leave</button></a></td>
+                            <td><a href="organization/{{$organization->id}}/leave"><button class="btn btn-danger">Leave</button></a></td>
                             @endif
                         </tr>
                         @endforeach
@@ -61,14 +61,16 @@
                         <tr>
                             <td>{{ $message->org_name }}</td>
                             <td>
-                                <form action="message/accept/{{$message->id}}" method="POST">
-                                    {{ csrf_field() }}
-                                    <button  class="btn"><i class="fa fa-check" aria-hidden="true"></i></button>
-                                </form>
-                                <form action="message/remove/{{$message->id}}" method="POST">
-                                    {{ csrf_field() }}
-                                    <button  class="btn"><i class="fa fa-times" aria-hidden="true"></i></button>
-                                </form>
+                                <div class="btn-group">
+                                    <form action="message/accept/{{$message->id}}" method="POST">
+                                        {{ csrf_field() }}
+                                        <button  class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i></button>
+                                    </form>
+                                    <form action="message/remove/{{$message->id}}" method="POST">
+                                        {{ csrf_field() }}
+                                        <button  class="btn btn-danger"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                         @endforeach

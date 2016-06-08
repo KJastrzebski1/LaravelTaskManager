@@ -46,7 +46,8 @@ $(document).ready(function () {
                 '</select>');
         $("tr#task-" + id + " .tpriority select").val(task["priority"]);
         if (permission) {
-            var org_id = parseInt(location.pathname.replace('/tasks/', ''));
+            var loc = location.pathname.split("/");
+            var org_id = parseInt(loc[loc.length - 1]);
             var users = getUsers(org_id);
             var user = '<select class="form-control">';
             for (var i = 0; i < users.length; i++) {
@@ -63,13 +64,15 @@ $(document).ready(function () {
         $(this).hide();
 
         var id = (this.id.replace('save-task-', ''));
-
+        var loc = location.pathname.split("/");
+        var org_id = parseInt(loc[loc.length - 1]);
         var task = {
             'id': id,
             'name': $("tr#task-" + id + " .tname input").val(),
             'deadline': $("tr#task-" + id + " .tdeadline input").val(),
             'status': $("tr#task-" + id + " .tstatus select").val(),
-            'priority': $("tr#task-" + id + " .tpriority select").val()
+            'priority': $("tr#task-" + id + " .tpriority select").val(),
+            'org_id': org_id
         };
         if (permission) {
             task.user_id = $("tr#task-" + id + " .tuser select").val();
@@ -187,35 +190,35 @@ $(document).ready(function () {
         var $btn = $(this).html("Save");
         $btn.toggleClass("set-role");
         $btn.toggleClass("save-role");
-        
+
         var id = parseInt(this.id.replace('set-role-', ''));
         var loc = location.pathname.split("/");
-        var org_id = parseInt(loc[loc.length-1]);
+        var org_id = parseInt(loc[loc.length - 1]);
         var roles;
         getRoles(org_id).then(function (response) {
             roles = response;
 
             console.log(roles);
             var select = "<select>";
-            for(var i = 0; i<roles.length; i++){
-                select += "<option value="+roles[i].id+">"+roles[i].name+"</option>";
+            for (var i = 0; i < roles.length; i++) {
+                select += "<option value=" + roles[i].id + ">" + roles[i].name + "</option>";
             }
             select += "</select>";
-            $("#member-"+id+" .member-role").html(select);
-            
-            
+            $("#member-" + id + " .member-role").html(select);
+
+
         });
     });
-    $('.members-table').on('click', '.save-role', function(){
+    $('.members-table').on('click', '.save-role', function () {
         var $btn = $(this).html("Edit");
         $btn.toggleClass("set-role");
         $btn.toggleClass("save-role");
         var id = parseInt(this.id.replace('set-role-', ''));
-        var role_id = $('#member-'+id+' .member-role option:selected').val();
-        var role_name = $('#member-'+id+' .member-role option:selected').html();
+        var role_id = $('#member-' + id + ' .member-role option:selected').val();
+        var role_name = $('#member-' + id + ' .member-role option:selected').html();
         var org_id = parseInt(location.pathname.replace('/organization/', ''));
-        setRole(id, org_id, role_id).then(function (response){
-            $("#member-"+id+" .member-role").html(role_name);
+        setRole(id, org_id, role_id).then(function (response) {
+            $("#member-" + id + " .member-role").html(role_name);
         });
     });
 });

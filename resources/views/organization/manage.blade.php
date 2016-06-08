@@ -18,13 +18,17 @@
                     <img src="{{ url($org->logo) }}">
                 </div>
                 <div class="col-sm-6">
-                    
+
                 </div>
                 <div class="col-sm-3">
-                    <form action="{{ url('/organization/'.$org->id.'/delete')}}" method="POST">
-                        {{ csrf_field() }}
-                        <button type="submit" class="btn btn-danger">Delete</button>
-                    </form>
+                    <div class="btn-group">
+                        <form action="{{ url('/organization/'.$org->id.'/delete')}}" method="POST">
+                            {{ csrf_field() }}
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                        <a class="btn btn-info" href="{{ url('/organization/'.$org->id.'/roles')}}">Manage Roles</a>
+                    </div>
+
                 </div>
 
             </div>
@@ -34,7 +38,7 @@
         @if ( $members)
         <div class="panel panel-default">
             <div class="panel-heading">
-                Current members <a href="{{ url('/organization/'.$org->id.'/roles')}}">Manage Roles</a>
+                Current members 
             </div>
             <div class="panel-body">
                 <table class="table table-striped members-table sortable">

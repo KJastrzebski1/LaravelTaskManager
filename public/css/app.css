@@ -9,3 +9,10 @@
 .alert{
     display: none;
 }
+
+.btn-group form{
+    display: inline-block;
+}
+.btn-group > * {
+    margin-bottom: 5px;
+}

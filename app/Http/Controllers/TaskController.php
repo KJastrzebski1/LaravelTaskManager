@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use DB;
+use Gate;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -24,6 +25,7 @@ class TaskController extends Controller {
      */
     protected $tasks;
     protected $roles;
+
     /**
      * Create a new controller instance.
      *
@@ -35,7 +37,7 @@ class TaskController extends Controller {
         $this->roles = $roles;
         $this->tasks = $tasks;
     }
-
+    
     /**
      * Display a list of all of the user's task.
      *
@@ -47,7 +49,7 @@ class TaskController extends Controller {
         $org = Organization::findOrFail($id);
         $projects = Project::where('org_id', $id)->get();
         $role = $this->roles->getRole($user, $org);
-        $permission = in_array( 'project_manager', unserialize($role->capabilities));
+        $permission = in_array('project_manager', unserialize($role->capabilities));
         $p = new Project();
         $p->name = 'Default';
         $p->id = 0;
@@ -56,8 +58,8 @@ class TaskController extends Controller {
         $users[0]->name = 'No Worker';
         $users[0]->id = 0;
         $u = User::get();
-        
-        foreach($u as $ut){
+
+        foreach ($u as $ut) {
             $users[$ut->id] = $ut;
         }
         $tasks = [];
@@ -65,7 +67,7 @@ class TaskController extends Controller {
             foreach ($projects as $project) {
                 $tasks[$project->id] = $this->tasks->forProject($project);
             }
-        }else{
+        } else {
             foreach ($projects as $project) {
                 $tasks[$project->id] = $this->tasks->forUser($user, $project);
             }
@@ -75,9 +77,8 @@ class TaskController extends Controller {
             'projects' => $projects,
             'permission' => $permission,
             'organization' => $org
-            
         ];
-        if($permission){
+        if ($permission) {
             $args['users'] = $users;
         }
         return view('tasks.index', $args);
@@ -91,22 +92,22 @@ class TaskController extends Controller {
      */
     public function store(Request $request) {
         //$this->authorize('isManager', $request->user());
-        
+
         $data = $request["data"];
         $task = Task::create([
-            "name" => $data["name"],
-            "deadline" => $data["deadline"],
-            "priority" => $data["priority"],
-            "status" => $data["status"],
-            "project_id" => $data["project_id"],
-            "user_id" => 0,
+                    "name" => $data["name"],
+                    "deadline" => $data["deadline"],
+                    "priority" => $data["priority"],
+                    "status" => $data["status"],
+                    "project_id" => $data["project_id"],
+                    "user_id" => 0,
         ]);
         $users[0] = new User();
         $users[0]->name = 'No Worker';
         $users[0]->id = 0;
         $u = User::get();
-        
-        foreach($u as $ut){
+
+        foreach ($u as $ut) {
             $users[$ut->id] = $ut;
         }
         return ['task' => $task]; //redirect('/tasks');
@@ -116,19 +117,25 @@ class TaskController extends Controller {
      * 
      */
 
-
     public function edit(Request $request) {
         $data = $request['data'];
+        $user = $request->user();
+        
+        $org = Organization::findOrFail($data["org_id"]);
+        $role = $this->roles->getRole($user, $org);
+        if(!in_array('task_manager', unserialize($role->capabilities))){
+            abort(403);
+        }
         $task = Task::findOrFail($data['id']);
         $task->name = $data['name'];
         $task->deadline = $data['deadline'];
         $task->priority = $data['priority'];
         $task->status = $data['status'];
-        $user = $request->user();
-        //if($user->role == 'Manager'){
-            $task->user_id = $data['user_id'];
-        //}
         
+        if (isset($data['user_id']) && in_array('project_manager', unserialize($role->capabilities))) {
+            $task->user_id = $data['user_id'];
+        }
+
         $task->save();
         return response()->json($task);
     }
@@ -137,7 +144,7 @@ class TaskController extends Controller {
         //$this->authorize('isManager', $request->user());
         $data = $request['data'];
         $task = Task::findOrFail($data);
-        
+
         $task->delete();
         return 'deleted';
     }

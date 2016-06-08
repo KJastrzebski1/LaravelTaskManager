@@ -23,17 +23,14 @@ class UserPolicy
         //
     }
     
-    public function isManager($array)
+    public function isManager(User $user, Organization $org)
     {
-        
-        $user = $array[1];
-        $org = $array[0];
         $query = DB::table('user_roles')
                 ->where('user_id', $user->id)
                 ->where('org_id', $org->id)
                 ->first();
         $role = Role::where('id', $query->role_id)->first();
-        return in_array('project_manager', $role);
+        return true;//in_array('project_manager', $role);
     }
     
     
