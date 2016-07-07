@@ -74,7 +74,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="task-project" class="col-sm-3 control-label">Status</label>
+                        <label for="task-project" class="col-sm-3 control-label">Project</label>
                         <div class="col-sm-6">
                             <select class="form-control" id="task-project" name="task_project">
                                 @foreach ($projects as $project)

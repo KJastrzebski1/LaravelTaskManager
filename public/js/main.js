@@ -104,20 +104,21 @@ $(document).ready(function () {
             'priority': $('#task-priority').val(),
             'project_id': parseInt($('#task-project').val())
         };
+        var loc = location.pathname.split("/");
+        var org_id = parseInt(loc[loc.length - 1]);
         //task = addTask(task);
-        console.log('elo');
         addTask(task).then(function (response) {
             if (typeof response === 'object')
             {
-                var users = getUsers();
-                console.log(response);
+                var users = getUsers(org_id);
+                console.log(users);
                 $("#project-" + response['project_id'] + " .task-table tbody").append(
                         '<tr id="task-' + response['id'] + '">' +
                         '<td class="table-text tname"><div>' + response['name'] + '</div></td>' +
                         '<td class="table-text tdeadline"><div>' + response['deadline'] + '</div></td>' +
                         '<td class="table-text tstatus"><div>' + response['status'] + '%</div></td>' +
                         '<td class="table-text tpriority"><div>' + response['priority'] + '</div></td>' +
-                        '<td class="table-text tuser"><div>' + users[response.user_id.id].name + '</div></td>' +
+                        '<td class="table-text tuser"><div>' + users[response.user_id].name + '</div></td>' +
                         '<td>' +
                         '<button type="submit" id="delete-task-' + response['id'] + '" class="btn btn-danger delete">' +
                         '<i class="fa fa-btn fa-trash"></i>Delete' +

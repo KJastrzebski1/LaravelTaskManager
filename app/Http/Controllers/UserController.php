@@ -21,10 +21,13 @@ class UserController extends Controller
         
         //$this->authorize('isManager');
         $users = User::get();
-        $u = new User();
-        $u->name = 'No Worker';
-        $u->id = 0;
-        $users[] = $u;
+        foreach($users as $user){
+            $u[$user->id] = $user; 
+        }
+        $u[0] = new User();
+        $u[0]->name = 'No Worker';
+        $u[0]->id = 0;
+        $users = $u;
         return response()->json($users);
     }
     
